@@ -1,0 +1,221 @@
+```css
+@font-face {
+    font-family: "Jonova";
+    src: url("fonts/Jonova-Regular.ttf") format("truetype");
+}
+
+
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+    margin: 0;
+
+    height: 100vh;
+
+    font-family: "Jonova", sans-serif;
+
+    background-image: url("backgrounds/background1.jpg");
+    background-size: cover;
+    background-position: center;
+
+    color: white;
+}
+
+
+.chat {
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    background: rgba(0, 0, 0, 0.15);
+}
+
+
+/* =========================
+   ШАПКА
+   ========================= */
+
+.chat-header {
+    height: 75px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 10px 16px;
+
+    background: rgba(255, 255, 255, 0.15);
+
+    backdrop-filter: blur(15px);
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+
+.chat-avatar {
+    width: 52px;
+    height: 52px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    margin-right: 12px;
+}
+
+
+.chat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.chat-name {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+
+.chat-status {
+    font-size: 13px;
+
+    opacity: 0.7;
+
+    margin-top: 2px;
+}
+
+
+/* =========================
+   СООБЩЕНИЯ
+   ========================= */
+
+.messages {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    padding: 20px;
+
+    overflow-y: auto;
+}
+
+
+.message {
+    max-width: 75%;
+
+    padding: 10px 14px;
+
+    border-radius: 18px;
+
+    font-size: 16px;
+
+    line-height: 1.4;
+
+    word-wrap: break-word;
+}
+
+
+.bot-message {
+    align-self: flex-start;
+
+    background: rgba(255, 255, 255, 0.2);
+
+    backdrop-filter: blur(10px);
+
+    border-bottom-left-radius: 5px;
+}
+
+
+.user-message {
+    align-self: flex-end;
+
+    background: rgba(255, 255, 255, 0.35);
+
+    border-bottom-right-radius: 5px;
+}
+
+
+/* =========================
+   ПОЛЕ ВВОДА
+   ========================= */
+
+.message-input {
+    display: flex;
+
+    gap: 10px;
+
+    padding: 12px 15px;
+
+    background: rgba(255, 255, 255, 0.15);
+
+    backdrop-filter: blur(15px);
+
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+
+.message-input input {
+    flex: 1;
+
+    height: 45px;
+
+    padding: 0 16px;
+
+    border: none;
+
+    outline: none;
+
+    border-radius: 23px;
+
+    background: rgba(255, 255, 255, 0.2);
+
+    color: white;
+
+    font-family: inherit;
+
+    font-size: 16px;
+}
+
+
+.message-input input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+
+.message-input button {
+    width: 45px;
+    height: 45px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.3);
+
+    color: white;
+
+    font-size: 20px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.message-input button:hover {
+    background: rgba(255, 255, 255, 0.45);
+
+    transform: scale(1.05);
+}
+
+
+.message-input button:active {
+    transform: scale(0.95);
+}
+```

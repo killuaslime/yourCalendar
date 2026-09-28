@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Чат — Твой календарь</title>
+
+    <link rel="stylesheet" href="chat.css">
+</head>
+
+<body>
+
+    <div class="chat">
+
+        <!-- Шапка чата -->
+        <div class="chat-header">
+            <a href="index.html" class="logo-button">
+                <img src="icons/back.png" alt="Назад" class="button-logo">
+            </a>
+            <img src="avatars/image.png" alt="Луна" class="chat-avatar">
+
+            <div class="chat-info">
+                <div class="chat-name">Луна</div>
+                <div class="chat-status">Был(а) онлайн недавно</div>
+            </div>
+
+        </div>
+
+
+        <!-- Область сообщений -->
+        <div class="messages">
+
+            <div class="message bot-message">
+                Привет ❤️
+            </div>
+
+            <div class="message bot-message">
+                Как ты сегодня?
+            </div>
+
+            <div class="message user-message">
+                Привет! Всё хорошо 😊
+            </div>
+
+            <div class="message bot-message">
+                Это очень хорошо!
+            </div>
+
+        </div>
+
+
+        <!-- Поле ввода -->
+        <div class="message-input">
+
+            <input
+                type="text"
+                id="message-input"
+                placeholder="Написать сообщение..."
+            >
+
+            <button id="send-button">
+                ➤
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <script src="chat.js"></script>
+
+</body>
+</html>
+

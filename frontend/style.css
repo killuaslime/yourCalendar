@@ -1,0 +1,108 @@
+@font-face {
+    font-family: "Jonova";
+    src: url("fonts/Jonova-Regular.ttf") format("truetype");
+}
+
+
+body{
+  margin: 0;
+  font-family: "Jonova", sans-serif;
+  color: black;
+  text-align: center;
+  background-color: azure;
+}
+.header{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.logo-calendar{
+  display:flex ;
+  align-items: center;    /* Выравниваем по центру по горизонтали */
+  justify-content: center;/* Выравниваем по центру по вертикали */
+  padding: 20px 20px;     /* Внутренние отступы кнопки */
+  cursor: pointer;        /* Курсор в виде руки при наведении */
+}
+#calendar{
+  display:none;
+}
+
+.date-strip {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    text-align: center;
+}
+
+.date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.weekday {
+  font-size: 10px;
+}
+
+.number {
+  margin-top: 10%;
+  font-size: 30px;
+}
+
+.today {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 45px;            /* Ширина логотипа */
+  height: 45px;            /* Высота логотипа */
+  border-radius: 60%;
+
+  background: rgba(126, 111, 111, 0.8);
+}
+.cycle-card{
+  background-color: rgba(148, 114, 141, 0.3);
+  background-origin: border-box;
+  background-image: none;
+}
+.buttons{
+  position: fixed;
+  bottom: 2%;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-width: 2px;
+  border-radius: 30px;
+  gap: 10%;
+}
+.logo-button {
+  display: flex;  /* Включаем флексбокс */
+  background: rgba(255, 255, 255, 0);
+  border-radius: 20px;     
+  flex-direction: column; /* Располагаем элементы вертикально (друг под другом) */
+  align-items: center;    /* Выравниваем по центру по горизонтали */
+  justify-content: center;/* Выравниваем по центру по вертикали */
+  padding: 20px 20px;     /* Внутренние отступы кнопки */
+  cursor: pointer;        /* Курсор в виде руки при наведении */
+}
+
+.button-logo {
+  width: 45px;            /* Ширина логотипа */
+  height: 45px;            /* Высота логотипа */
+}
+
+.screen {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.hidden {
+    display: none;
+}

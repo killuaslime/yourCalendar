@@ -9,7 +9,7 @@ body{
   font-family: "Jonova", sans-serif;
   color: black;
   text-align: center;
-  background-color: azure;
+  background-image: url("backgrounds/home.png");
 }
 .header{
   display: flex;
@@ -60,11 +60,8 @@ body{
 
   background: rgba(126, 111, 111, 0.8);
 }
-.cycle-card{
-  background-color: rgba(148, 114, 141, 0.3);
-  background-origin: border-box;
-  background-image: none;
-}
+
+
 .buttons{
   position: fixed;
   bottom: 2%;

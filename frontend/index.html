@@ -1,79 +1,211 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Твой календарь</title>
 
     <link rel="stylesheet" href="style.css">
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
- <body>
 
-    <div class="header">
-        <h1 style="text-align: center;">Твой календарь</h1>
-        <button class="logo-calendar">  
-            <img src="icons/calendar.png" alt="Календарь" class="button-logo">        
-        </button>
-    </div>
-    <div class="date-strip">
-        <div class="date">
-            <span class="weekday">M</span>
-            <span class="number">28</span>
-        </div>
+<body>
 
-        <div class="date">
-            <span class="weekday">T</span>
+    <main class="home">
+
+        <!-- =========================
+             ВЕРХНЯЯ ЧАСТЬ
+             ========================= -->
+
+        <header class="header">
+
+            <h1>Твой календарь</h1>
+
+            <button class="calendar-button">
+                <img
+                    src="icons/calendar.png"
+                    alt="Календарь"
+                >
+            </button>
+
+        </header>
+
+
+        <!-- =========================
+             ЛЕНТА ДАТ
+             ========================= -->
+
+        <section class="date-strip">
+
+            <div class="date">
+                <span class="weekday">ПН</span>
+                <span class="number">28</span>
+            </div>
+
             <div class="date today">
+                <span class="weekday">ВТ</span>
                 <span class="number">29</span>
             </div>
-        </div>
 
-        <div class="date">
-            <span class="weekday">W</span>
-            <span class="number">30</span>
-        </div>
+            <div class="date">
+                <span class="weekday">СР</span>
+                <span class="number">30</span>
+            </div>
 
-        <div class="date">
-            <span class="weekday">T</span>
-            <span class="number">1</span>
-        </div>
+            <div class="date">
+                <span class="weekday">ЧТ</span>
+                <span class="number">1</span>
+            </div>
 
-        <div class="date">
-            <span class="weekday">F</span>
-            <span class="number">2</span>
-        </div>
+            <div class="date">
+                <span class="weekday">ПТ</span>
+                <span class="number">2</span>
+            </div>
 
-        <div class="date">
-            <span class="weekday">S</span>
-            <span class="number">3</span>
-        </div>
+            <div class="date">
+                <span class="weekday">СБ</span>
+                <span class="number">3</span>
+            </div>
 
-        <div class="date">
-            <span class="weekday">S</span>
-            <span class="number">4</span>
-        </div>
+            <div class="date">
+                <span class="weekday">ВС</span>
+                <span class="number">4</span>
+            </div>
 
-    </div>
+        </section>
 
-    <div id="calendar">
-        <h2>Календарь</h2>
 
-        <!-- здесь позже будет полноценный календарь -->
+        <!-- =========================
+             ОСНОВНОЙ КОНТЕНТ
+             ========================= -->
 
-    </div>
-    <div class="buttons">
-        <a href="index.html" class="logo-button">
-            <img src="icons/homepage.png" alt="Чат" class="button-logo">
-        </a>
-        <a href="chat.html" class="logo-button">
-            <img src="icons/chat.png" alt="Чат" class="button-logo">
-        </a>
+        <section class="content">
 
-        <a href="settings.html" class="logo-button">
-            <img src="icons/settings.png" alt="Чат" class="button-logo">
-        </a>
-    </div>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+            <!-- ЦИКЛ -->
+
+            <div class="cycle-card">
+
+                <div class="card-title">
+                    Твой цикл
+                </div>
+
+                <div class="cycle-day">
+                    14
+                </div>
+
+                <div class="cycle-label">
+                    день цикла
+                </div>
+
+                <div class="cycle-next">
+                    Месячные начнутся через
+                    <strong>14 дней</strong>
+                </div>
+
+            </div>
+
+
+            <!-- СЕГОДНЯ -->
+
+            <div class="today-card">
+
+                <div class="card-title">
+                    Сегодня
+                </div>
+
+                <div class="today-question">
+                    Как ты себя чувствуешь?
+                </div>
+
+                <button class="action-button">
+                    Отметить симптомы
+                </button>
+
+            </div>
+
+
+            <!-- КАЛЕНДАРЬ -->
+
+            <button class="calendar-card">
+
+                <img
+                    src="icons/calendar.png"
+                    alt=""
+                >
+
+                <div>
+                    <div class="calendar-card-title">
+                        Календарь
+                    </div>
+
+                    <div class="calendar-card-text">
+                        Посмотреть весь цикл
+                    </div>
+                </div>
+
+                <span class="arrow">
+                    ›
+                </span>
+
+            </button>
+
+
+        </section>
+
+
+        <!-- =========================
+             НИЖНЯЯ НАВИГАЦИЯ
+             ========================= -->
+
+        <nav class="bottom-navigation">
+
+            <a
+                href="index.html"
+                class="nav-button active"
+            >
+                <img
+                    src="icons/homepage.png"
+                    alt="Главная"
+                >
+            </a>
+
+
+            <a
+                href="chat.html"
+                class="nav-button"
+            >
+                <img
+                    src="icons/chat.png"
+                    alt="Чат"
+                >
+            </a>
+
+
+            <a
+                href="settings.html"
+                class="nav-button"
+            >
+                <img
+                    src="icons/settings.png"
+                    alt="Настройки"
+                >
+            </a>
+
+        </nav>
+
+    </main>
+
+
     <script src="index.js"></script>
+
 </body>
+
 </html>

@@ -1,42 +1,157 @@
-
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Настройки</title>
+    <title>Настройки — Твой календарь</title>
 
     <link rel="stylesheet" href="settings.css">
 </head>
+
 <body>
+
+    <!-- Шапка профиля -->
     <div class="settings-header">
-        <!-- Шапка -->
-        <a href="index.html" class="logo-button">
-            <img src="icons/back.png" alt="Назад" class="button-logo">
-        </a>
-        
 
+        <!-- Кнопка назад -->
+        <a href="index.html" class="back-button">
+            <img src="icons/back.png" alt="Назад">
+        </a>
+
+        <!-- Аватар -->
+        <a href="profile.html?type=user" class="avatar-link">
+            <img
+                src="avatars/userPicture.png"
+                alt="Аватар пользователя"
+                class="user-avatar"
+            >
+        </a>
+
+        <!-- Информация пользователя -->
         <div class="settings-info">
-            <div class="user-profile">User name</div>
-            <div class="user-name">@username</div>
-            <div class="subscribe">подписка: бесплатная</div>
+
+            <div class="user-profile">
+                User name
+            </div>
+
+            <div class="user-name">
+                @username
+            </div>
+
+            <div class="subscribe">
+                Подписка: бесплатная
+            </div>
+
         </div>
-        <img src="avatars/userPicture.png" alt="user avatar" class="user-avatar">
-    </div> 
-    <div class="settings-theme">
-        <!-- Настройка темы -->
-        <div class="theme-text">Включить темную тему: </div>
-        <label class="toggle">
-            <input type="checkbox" id="btnToggle" name="btnToggle" />
-            <span class="slider"></span>
-        </label>
-    </div>
-    <div class="choose-background">
-        <a href="chooseBG.html">
-        <div>Выбрать фон</div>
-        </a>
+
     </div>
 
-    
+
+    <!-- Настройки -->
+    <div class="settings-list">
+
+        <!-- Темная тема -->
+        <div class="settings-item">
+
+            <div class="setting-text">
+
+                <div class="setting-title">
+                    Темная тема
+                </div>
+
+                <div class="setting-description">
+                    Изменить оформление приложения
+                </div>
+
+            </div>
+
+            <label class="toggle">
+
+                <input
+                    type="checkbox"
+                    id="btnToggle"
+                >
+
+                <span class="slider"></span>
+
+            </label>
+
+        </div>
+
+
+        <!-- Выбор фона -->
+        <a
+            href="chooseBG.html"
+            class="settings-item"
+        >
+
+            <div class="setting-text">
+
+                <div class="setting-title">
+                    Выбрать фон
+                </div>
+
+                <div class="setting-description">
+                    Настроить внешний вид приложения
+                </div>
+
+            </div>
+
+            <div class="setting-arrow">
+                ›
+            </div>
+
+        </a>
+
+
+        <!-- Персонаж -->
+        <div class="settings-item">
+
+            <div class="setting-text">
+
+                <div class="setting-title">
+                    Персонаж
+                </div>
+
+                <div class="setting-description">
+                    Настроить твоего персонажа
+                </div>
+
+            </div>
+
+            <div class="setting-arrow">
+                ›
+            </div>
+
+        </div>
+
+
+        <!-- Уведомления -->
+        <div class="settings-item">
+
+            <div class="setting-text">
+
+                <div class="setting-title">
+                    Уведомления
+                </div>
+
+                <div class="setting-description">
+                    Настройки уведомлений
+                </div>
+
+            </div>
+
+            <div class="setting-arrow">
+                ›
+            </div>
+
+        </div>
+
+    </div>
+
+<script src="settings.js"></script>
 </body>
+
+</html>

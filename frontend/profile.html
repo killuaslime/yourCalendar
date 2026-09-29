@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
+    <title>Профиль</title>
+
+    <link rel="stylesheet" href="profile.css">
+
+    <!-- Telegram Mini Apps -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+
+<body>
+
+    <div class="profile-viewer">
+
+        <!-- Полоски аватарок -->
+        <div class="avatar-progress" id="avatarProgress"></div>
+
+
+        <!-- Кнопка назад -->
+        <button class="back-button" id="backButton">
+            <img src="icons/back.png" alt="Назад">
+        </button>
+
+
+        <!-- Аватар -->
+        <img
+            src=""
+            alt="Аватар"
+            class="profile-image"
+            id="profileImage"
+        >
+
+
+        <!-- Области переключения -->
+        <div
+            class="navigation-area left-area"
+            id="leftArea"
+        ></div>
+
+        <div
+            class="navigation-area right-area"
+            id="rightArea"
+        ></div>
+
+
+        <!-- Информация -->
+        <div class="profile-info">
+
+            <div
+                class="profile-name"
+                id="profileName"
+            >
+                Загрузка...
+            </div>
+
+            <div
+                class="profile-username"
+                id="profileUsername"
+            >
+                @username
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script src="profile.js"></script>
+
+</body>
+
+</html>

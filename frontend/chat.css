@@ -67,6 +67,7 @@ body {
 }
 
 .chat-avatar {
+    cursor: pointer;
     width: 52px;
     height: 52px;
 

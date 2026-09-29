@@ -4,102 +4,494 @@
 }
 
 
-body{
-  margin: 0;
-  font-family: "Jonova", sans-serif;
-  color: black;
-  text-align: center;
-  background-image: url("backgrounds/home.png");
-}
-.header{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.logo-calendar{
-  display:flex ;
-  align-items: center;    /* Выравниваем по центру по горизонтали */
-  justify-content: center;/* Выравниваем по центру по вертикали */
-  padding: 20px 20px;     /* Внутренние отступы кнопки */
-  cursor: pointer;        /* Курсор в виде руки при наведении */
-}
-#calendar{
-  display:none;
+/* =========================================
+   ОСНОВА
+   ========================================= */
+
+* {
+    box-sizing: border-box;
+
+    -webkit-tap-highlight-color: transparent;
 }
 
-.date-strip {
-    display: flex;
+
+html,
+body {
     width: 100%;
-    justify-content: space-around;
+    min-height: 100%;
+
+    margin: 0;
+    padding: 0;
+}
+
+
+body {
+    font-family: "Jonova", sans-serif;
+
+    color: #222;
+
+    background-image: url("backgrounds/home.png");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+
+button,
+a {
+    font-family: inherit;
+}
+
+
+/* =========================================
+   ГЛАВНАЯ
+   ========================================= */
+
+.home {
+    width: 100%;
+    min-height: 100dvh;
+
+    padding:
+
+        max(15px, env(safe-area-inset-top))
+
+        16px
+
+        calc(100px + env(safe-area-inset-bottom));
+}
+
+
+/* =========================================
+   ШАПКА
+   ========================================= */
+
+.header {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+
+    height: 65px;
+}
+
+
+.header h1 {
+    margin: 0;
+
+    font-size: 25px;
+    font-weight: 600;
+}
+
+
+.calendar-button {
+    position: absolute;
+
+    right: 0;
+
+    width: 48px;
+    height: 48px;
+
+    padding: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid rgba(255, 255, 255, 0.45);
+
+    border-radius: 16px;
+
+    background: rgba(255, 255, 255, 0.35);
+
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+
+    cursor: pointer;
+
+    transition: 0.15s;
+}
+
+
+.calendar-button img {
+    width: 28px;
+    height: 28px;
+
+    object-fit: contain;
+}
+
+
+.calendar-button:active {
+    transform: scale(0.92);
+}
+
+
+/* =========================================
+   ДАТЫ
+   ========================================= */
+
+.date-strip {
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: 15px;
+}
+
+
+.date {
+    width: 42px;
+    height: 62px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 20px;
+
+    transition: 0.2s;
+}
+
+
+.weekday {
+    font-size: 11px;
+
+    opacity: 0.55;
+}
+
+
+.number {
+    margin-top: 6px;
+
+    font-size: 20px;
+}
+
+
+/* =========================================
+   СЕГОДНЯ
+   ========================================= */
+
+.date.today {
+    color: white;
+
+    background: rgba(40, 40, 40, 0.78);
+
+    box-shadow:
+        0 5px 15px rgba(0, 0, 0, 0.12);
+}
+
+
+.date.today .weekday {
+    opacity: 0.8;
+}
+
+
+/* =========================================
+   КОНТЕНТ
+   ========================================= */
+
+.content {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+
+    margin-top: 25px;
+}
+
+
+/* =========================================
+   ОБЩИЕ КАРТОЧКИ
+   ========================================= */
+
+.cycle-card,
+.today-card,
+.calendar-card {
+
+    width: 100%;
+
+    border: 1px solid rgba(255, 255, 255, 0.5);
+
+    border-radius: 25px;
+
+    background: rgba(255, 255, 255, 0.42);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.06);
+}
+
+
+/* =========================================
+   ЦИКЛ
+   ========================================= */
+
+.cycle-card {
+    padding: 22px;
+
     text-align: center;
 }
 
-.date {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
 
-.weekday {
-  font-size: 10px;
-}
+.card-title {
+    font-size: 17px;
 
-.number {
-  margin-top: 10%;
-  font-size: 30px;
-}
-
-.today {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 45px;            /* Ширина логотипа */
-  height: 45px;            /* Высота логотипа */
-  border-radius: 60%;
-
-  background: rgba(126, 111, 111, 0.8);
+    opacity: 0.7;
 }
 
 
-.buttons{
-  position: fixed;
-  bottom: 2%;
-  left: 0;
-  right: 0;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-width: 2px;
-  border-radius: 30px;
-  gap: 10%;
-}
-.logo-button {
-  display: flex;  /* Включаем флексбокс */
-  background: rgba(255, 255, 255, 0);
-  border-radius: 20px;     
-  flex-direction: column; /* Располагаем элементы вертикально (друг под другом) */
-  align-items: center;    /* Выравниваем по центру по горизонтали */
-  justify-content: center;/* Выравниваем по центру по вертикали */
-  padding: 20px 20px;     /* Внутренние отступы кнопки */
-  cursor: pointer;        /* Курсор в виде руки при наведении */
+.cycle-day {
+    margin-top: 5px;
+
+    font-size: 58px;
+
+    font-weight: 600;
+
+    line-height: 1;
 }
 
-.button-logo {
-  width: 45px;            /* Ширина логотипа */
-  height: 45px;            /* Высота логотипа */
+
+.cycle-label {
+    margin-top: 3px;
+
+    font-size: 14px;
+
+    opacity: 0.6;
 }
 
-.screen {
-    position: fixed;
-    inset: 0;
+
+.cycle-next {
+    margin-top: 20px;
+
+    font-size: 15px;
+
+    opacity: 0.75;
+}
+
+
+.cycle-next strong {
+    font-weight: 600;
+}
+
+
+/* =========================================
+   СЕГОДНЯ
+   ========================================= */
+
+.today-card {
+    padding: 20px;
+}
+
+
+.today-question {
+    margin-top: 12px;
+
+    font-size: 18px;
+}
+
+
+/* =========================================
+   КНОПКА
+   ========================================= */
+
+.action-button {
+    width: 100%;
+
+    margin-top: 15px;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 16px;
+
+    background: rgba(255, 255, 255, 0.65);
+
+    color: #222;
+
+    font-family: inherit;
+
+    font-size: 16px;
+
+    cursor: pointer;
+
+    transition: 0.15s;
+}
+
+
+.action-button:active {
+    transform: scale(0.97);
+
+    background: rgba(255, 255, 255, 0.8);
+}
+
+
+/* =========================================
+   КАЛЕНДАРЬ
+   ========================================= */
+
+.calendar-card {
+
+    min-height: 75px;
+
+    padding: 15px 18px;
+
     display: flex;
-    flex-direction: column;
+
+    align-items: center;
+
+    text-align: left;
+
+    color: #222;
+
+    cursor: pointer;
 }
 
-.hidden {
-    display: none;
+
+.calendar-card img {
+    width: 35px;
+    height: 35px;
+
+    margin-right: 14px;
+}
+
+
+.calendar-card-title {
+    font-size: 17px;
+}
+
+
+.calendar-card-text {
+    margin-top: 3px;
+
+    font-size: 13px;
+
+    opacity: 0.55;
+}
+
+
+.arrow {
+    margin-left: auto;
+
+    font-size: 30px;
+
+    opacity: 0.4;
+}
+
+
+/* =========================================
+   НИЖНЕЕ МЕНЮ
+   ========================================= */
+
+.bottom-navigation {
+
+    position: fixed;
+
+    z-index: 100;
+
+    left: 12px;
+    right: 12px;
+
+    bottom: max(12px, env(safe-area-inset-bottom));
+
+    height: 72px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-around;
+
+    border: 1px solid rgba(255, 255, 255, 0.5);
+
+    border-radius: 26px;
+
+    background: rgba(255, 255, 255, 0.35);
+
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+
+.nav-button {
+
+    width: 54px;
+    height: 54px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    text-decoration: none;
+
+    transition:
+        transform 0.15s,
+        background 0.15s;
+}
+
+
+.nav-button img {
+    width: 30px;
+    height: 30px;
+
+    object-fit: contain;
+}
+
+
+.nav-button.active {
+    background: rgba(255, 255, 255, 0.45);
+}
+
+
+.nav-button:active {
+    transform: scale(0.9);
+}
+
+
+/* =========================================
+   МАЛЕНЬКИЕ ЭКРАНЫ
+   ========================================= */
+
+@media (max-width: 380px) {
+
+    .home {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+
+    .header h1 {
+        font-size: 22px;
+    }
+
+
+    .date {
+        width: 38px;
+    }
+
+
+    .number {
+        font-size: 18px;
+    }
+
+
+    .cycle-day {
+        font-size: 50px;
+    }
+
 }

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Сообщения</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="messages.css">
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+
+<body>
+
+    <main class="home">
+
+        <header class="header">
+            <h1>Сообщения</h1>
+        </header>
+
+
+        <!-- Список персонажей (заполняется в messages.js) -->
+
+        <section class="contact-list" id="contactList"></section>
+
+
+        <!-- Нижняя навигация -->
+
+        <nav class="bottom-navigation">
+
+            <a href="index.html" class="nav-button">
+                <img src="icons/homepage.png" alt="Главная">
+            </a>
+
+            <a href="messages.html" class="nav-button active">
+                <img src="icons/chat.png" alt="Чат">
+            </a>
+
+            <a href="settings.html" class="nav-button">
+                <img src="icons/settings.png" alt="Настройки">
+            </a>
+
+        </nav>
+
+
+        <!-- Окно "нужна подписка" -->
+
+        <div class="calendar-overlay" id="paywallOverlay">
+
+            <div class="calendar-modal paywall-modal">
+
+                <div class="calendar-modal-header">
+
+                    <div class="calendar-title">Подписка</div>
+
+                    <button class="calendar-close" id="paywallClose">×</button>
+
+                </div>
+
+                <div class="paywall-body">
+
+                    <div class="paywall-avatar" id="paywallAvatar"></div>
+
+                    <div class="paywall-title" id="paywallTitle"></div>
+
+                    <p class="paywall-text">
+                        В бесплатной версии можно общаться с одним персонажем.
+                        С подпиской ты сможешь читать сообщения от всех и
+                        переписываться с каждым.
+                    </p>
+
+                    <ul class="paywall-list">
+                        <li>Чат со всеми персонажами</li>
+                        <li>Можно переключаться между ними в любой момент</li>
+                    </ul>
+
+                    <button class="paywall-buy" id="paywallBuy">
+                        Оформить подписку
+                    </button>
+
+                    <button class="paywall-later" id="paywallLater">
+                        Не сейчас
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <script src="characters.js"></script>
+    <script src="messages.js"></script>
+
+</body>
+
+</html>

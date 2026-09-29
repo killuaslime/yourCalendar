@@ -213,8 +213,7 @@ a {
    ========================================= */
 
 .cycle-card,
-.today-card,
-.calendar-card {
+.today-card {
 
     width: 100%;
 
@@ -250,11 +249,59 @@ a {
 }
 
 
+.cycle-next {
+    margin: 0;
+}
+
+
+.cycle-next-label {
+    display: block;
+
+    font-size: 15px;
+
+    opacity: 0.7;
+}
+
+
+.cycle-next-value {
+    display: block;
+
+    margin-top: 6px;
+
+    font-size: 42px;
+    font-weight: 600;
+
+    line-height: 1.1;
+}
+
+
+.cycle-info {
+    margin-top: 18px;
+    padding-top: 14px;
+
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+
+.cycle-info .card-title {
+    font-size: 16px;
+}
+
+
+.cycle-day-wrap {
+    display: flex;
+    align-items: baseline;
+
+    gap: 6px;
+}
+
+
 .cycle-day {
-    margin-top: 5px;
-
-    font-size: 58px;
-
+    font-size: 26px;
     font-weight: 600;
 
     line-height: 1;
@@ -262,26 +309,12 @@ a {
 
 
 .cycle-label {
-    margin-top: 3px;
-
     font-size: 14px;
 
     opacity: 0.6;
 }
 
 
-.cycle-next {
-    margin-top: 20px;
-
-    font-size: 15px;
-
-    opacity: 0.75;
-}
-
-
-.cycle-next strong {
-    font-weight: 600;
-}
 
 
 /* =========================================
@@ -336,57 +369,6 @@ a {
 }
 
 
-/* =========================================
-   КАЛЕНДАРЬ
-   ========================================= */
-
-.calendar-card {
-
-    min-height: 75px;
-
-    padding: 15px 18px;
-
-    display: flex;
-
-    align-items: center;
-
-    text-align: left;
-
-    color: #222;
-
-    cursor: pointer;
-}
-
-
-.calendar-card img {
-    width: 35px;
-    height: 35px;
-
-    margin-right: 14px;
-}
-
-
-.calendar-card-title {
-    font-size: 17px;
-}
-
-
-.calendar-card-text {
-    margin-top: 3px;
-
-    font-size: 13px;
-
-    opacity: 0.55;
-}
-
-
-.arrow {
-    margin-left: auto;
-
-    font-size: 30px;
-
-    opacity: 0.4;
-}
 
 
 /* =========================================
@@ -490,8 +472,515 @@ a {
     }
 
 
-    .cycle-day {
-        font-size: 50px;
-    }
+}
+/* =========================================================
+   ОТМЕТИТЬ МЕСЯЧНЫЕ
+   ========================================================= */
 
+.period-button {
+    width: 100%;
+    margin-top: 18px;
+
+    padding: 13px 16px;
+
+    border: none;
+    border-radius: 16px;
+
+    background: #e85b6b;
+
+    color: white;
+
+    font-family: inherit;
+    font-size: 15px;
+
+    cursor: pointer;
+
+    transition: transform 0.15s ease;
+}
+
+.period-button:active {
+    transform: scale(0.97);
+}
+
+
+/* =========================================================
+   КАЛЕНДАРЬ OVERLAY
+   ========================================================= */
+
+.calendar-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1000;
+
+    display: flex;
+    align-items: flex-end;
+
+    background: rgba(0, 0, 0, 0.28);
+
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
+}
+
+
+.calendar-overlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+/* =========================================================
+   ОКНО КАЛЕНДАРЯ
+   ========================================================= */
+
+.calendar-modal {
+    width: 100%;
+    height: 88dvh;
+
+    color: white;
+
+    background: rgba(35, 35, 42, 0.96);
+
+    border-radius: 28px 28px 0 0;
+
+    border-top:
+        1px solid rgba(255, 255, 255, 0.18);
+
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+
+    transform: translateY(100%);
+
+    transition:
+        transform 0.3s ease;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+}
+
+
+.calendar-overlay.open .calendar-modal {
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   ЗАГОЛОВОК КАЛЕНДАРЯ
+   ========================================================= */
+
+.calendar-modal-header {
+    min-height: 76px;
+
+    padding: 15px 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-bottom:
+        1px solid rgba(255, 255, 255, 0.1);
+
+    flex-shrink: 0;
+}
+
+
+.calendar-title {
+    font-size: 21px;
+}
+
+
+.calendar-mode-text {
+    margin-top: 4px;
+
+    font-size: 12px;
+
+    opacity: 0.55;
+}
+
+
+.calendar-close {
+    width: 40px;
+    height: 40px;
+
+    border: none;
+    border-radius: 50%;
+
+    background:
+        rgba(255, 255, 255, 0.12);
+
+    color: white;
+
+    font-family: Arial, sans-serif;
+    font-size: 27px;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   ПРОКРУТКА КАЛЕНДАРЯ
+   ========================================================= */
+
+.calendar-scroll {
+    flex: 1;
+
+    overflow-y: auto;
+
+    padding: 16px 15px 30px;
+
+    -webkit-overflow-scrolling: touch;
+
+    overscroll-behavior: contain;
+}
+
+
+.calendar-scroll::-webkit-scrollbar {
+    width: 0;
+}
+
+
+/* =========================================================
+   МЕСЯЦ
+   ========================================================= */
+
+.calendar-month {
+    margin-bottom: 32px;
+}
+
+
+.calendar-month-title {
+    margin-bottom: 15px;
+
+    text-align: center;
+
+    font-size: 19px;
+
+    text-transform: capitalize;
+}
+
+
+/* =========================================================
+   ДНИ НЕДЕЛИ
+   ========================================================= */
+
+.calendar-weekdays {
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, 1fr);
+
+    margin-bottom: 8px;
+}
+
+
+.calendar-weekday {
+    text-align: center;
+
+    font-size: 12px;
+
+    opacity: 0.5;
+}
+
+
+/* =========================================================
+   ДНИ
+   ========================================================= */
+
+.calendar-days {
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, 1fr);
+
+    gap: 5px;
+}
+
+
+.calendar-empty {
+    height: 42px;
+}
+
+
+.calendar-day {
+    width: 42px;
+    height: 42px;
+
+    margin: auto;
+
+    padding: 0;
+
+    border: 2px solid transparent;
+    border-radius: 50%;
+
+    background: transparent;
+
+    color: white;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        background 0.15s ease;
+}
+
+
+.calendar-day:active {
+    transform: scale(0.88);
+}
+
+
+/* =========================================================
+   СЕГОДНЯ — СЕРЫЙ
+   ========================================================= */
+
+.calendar-day.today {
+    background:
+        rgba(150, 150, 150, 0.5);
+}
+
+
+/* =========================================================
+   МЕСЯЧНЫЕ — КРАСНЫЕ
+   ========================================================= */
+
+.calendar-day.period {
+    background: #e85b6b;
+
+    border-color: #e85b6b;
+}
+
+
+/*
+   Если сегодня одновременно
+   является днём месячных
+*/
+
+.calendar-day.today.period {
+    background: #e85b6b;
+
+    border-color:
+        rgba(255, 255, 255, 0.7);
+}
+
+
+/* =========================================================
+   ПРОГНОЗ И БУДУЩИЕ ДНИ В КАЛЕНДАРЕ
+   ========================================================= */
+
+.calendar-day.predicted {
+    border: 2px dashed #e85b6b;
+
+    background: rgba(232, 91, 107, 0.12);
+}
+
+.calendar-day.future:not(.predicted) {
+    opacity: 0.45;
+}
+
+
+/* =========================================================
+   ОКНО САМОЧУВСТВИЯ
+   ========================================================= */
+
+.symptoms-modal {
+    height: auto;
+    max-height: 88dvh;
+}
+
+.symptoms-body {
+    flex: 1 1 auto;
+    min-height: 0;
+
+    padding: 16px 18px 8px;
+
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.symptoms-section {
+    margin-bottom: 22px;
+}
+
+.symptoms-section-title {
+    margin-bottom: 10px;
+
+    font-size: 15px;
+
+    opacity: 0.8;
+}
+
+.mood-row {
+    display: flex;
+    gap: 6px;
+}
+
+.mood-option {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+
+    padding: 10px 2px;
+
+    border: 2px solid transparent;
+    border-radius: 16px;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    color: white;
+
+    font-family: inherit;
+    font-size: 10px;
+
+    cursor: pointer;
+}
+
+.mood-emoji {
+    font-size: 26px;
+}
+
+.mood-option.selected {
+    border-color: #e85b6b;
+
+    background: rgba(232, 91, 107, 0.2);
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.chip {
+    padding: 9px 14px;
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    color: white;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.chip.selected {
+    border-color: #e85b6b;
+
+    background: #e85b6b;
+}
+
+.pain-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.pain-option {
+    padding: 11px 4px;
+
+    border: 2px solid transparent;
+    border-radius: 14px;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    color: white;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.pain-option.selected {
+    border-color: #e85b6b;
+
+    background: rgba(232, 91, 107, 0.2);
+}
+
+.pain-hint {
+    display: none;
+
+    margin-top: 10px;
+
+    font-size: 12px;
+    line-height: 1.4;
+
+    opacity: 0.75;
+}
+
+.pain-hint.visible {
+    display: block;
+}
+
+.symptoms-note {
+    width: 100%;
+    min-height: 70px;
+
+    padding: 12px;
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 14px;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    color: white;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    resize: none;
+    outline: none;
+}
+
+.symptoms-note::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.symptoms-footer {
+    flex-shrink: 0;
+
+    padding: 12px 18px calc(12px + env(safe-area-inset-bottom));
+
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.symptoms-save {
+    width: 100%;
+
+    padding: 15px;
+
+    border: none;
+    border-radius: 16px;
+
+    background: #e85b6b;
+
+    color: white;
+
+    font-family: inherit;
+    font-size: 16px;
+
+    cursor: pointer;
+}
+
+.symptoms-save:active {
+    transform: scale(0.97);
 }

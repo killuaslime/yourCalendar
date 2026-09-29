@@ -1,0 +1,87 @@
+/* =========================================================
+   transitions.css — плавные переходы между страницами
+   Подключить в <head> КАЖДОЙ страницы вместе с transitions.js
+   ========================================================= */
+
+/* Появление страницы: вперёд — справа, назад — слева */
+
+body {
+    animation: pageEnter 0.35s ease-out;
+}
+
+.enter-back body {
+    animation-name: pageEnterBack;
+}
+
+
+/* Уход со страницы (правила ниже должны идти после правил выше) */
+
+body.page-exit {
+    animation: pageExit 0.3s ease-in forwards;
+}
+
+body.page-exit-back {
+    animation: pageExitBack 0.3s ease-in forwards;
+}
+
+
+@keyframes pageEnter {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes pageEnterBack {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes pageExit {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateX(-40px);
+    }
+}
+
+@keyframes pageExitBack {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+}
+
+
+/* Если в системе отключены анимации — не анимируем */
+
+@media (prefers-reduced-motion: reduce) {
+
+    body,
+    body.page-exit,
+    body.page-exit-back {
+        animation: none;
+    }
+
+}

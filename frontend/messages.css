@@ -1,0 +1,277 @@
+/* =========================================================
+   messages.css — список контактов и окно подписки
+   Подключать ПОСЛЕ style.css (используются его стили
+   фона, шапки, навигации и всплывающих окон).
+   ========================================================= */
+
+.contact-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin-top: 20px;
+}
+
+
+/* =========================================
+   СТРОКА КОНТАКТА
+   ========================================= */
+
+.contact-row {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 12px 14px;
+
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 22px;
+
+    background: rgba(255, 255, 255, 0.42);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+
+    cursor: pointer;
+
+    transition: transform 0.15s ease;
+}
+
+.contact-row:active {
+    transform: scale(0.98);
+}
+
+
+.contact-avatar {
+    width: 56px;
+    height: 56px;
+
+    flex-shrink: 0;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+    border: 2px solid rgba(255, 255, 255, 0.8);
+
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.avatar-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+
+    font-size: 22px;
+
+    background: linear-gradient(135deg, #e85b6b, #f0a1a8);
+}
+
+
+.contact-body {
+    flex: 1;
+
+    min-width: 0;
+}
+
+.contact-top,
+.contact-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 8px;
+}
+
+.contact-bottom {
+    margin-top: 4px;
+}
+
+
+.contact-name {
+    overflow: hidden;
+
+    font-size: 17px;
+    font-weight: 600;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.contact-time {
+    flex-shrink: 0;
+
+    font-size: 12px;
+
+    opacity: 0.55;
+}
+
+
+.contact-preview-wrap {
+    display: flex;
+    align-items: center;
+
+    min-width: 0;
+}
+
+.contact-preview {
+    overflow: hidden;
+
+    font-size: 14px;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    opacity: 0.65;
+}
+
+/* Закрытое сообщение: текст размыт, рядом замок */
+
+.contact-preview.locked {
+    filter: blur(4px);
+
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.contact-lock {
+    margin-right: 6px;
+
+    font-size: 13px;
+}
+
+
+.contact-badge {
+    min-width: 22px;
+    height: 22px;
+
+    padding: 0 6px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 11px;
+
+    background: #e85b6b;
+
+    color: white;
+
+    font-size: 12px;
+}
+
+
+/* =========================================
+   ОКНО ПОДПИСКИ
+   ========================================= */
+
+.paywall-modal {
+    height: auto;
+}
+
+.paywall-body {
+    padding: 22px 22px calc(22px + env(safe-area-inset-bottom));
+
+    text-align: center;
+}
+
+.paywall-avatar {
+    display: flex;
+    justify-content: center;
+}
+
+.paywall-avatar .contact-avatar {
+    width: 84px;
+    height: 84px;
+
+    font-size: 32px;
+}
+
+.paywall-title {
+    margin-top: 14px;
+
+    font-size: 20px;
+}
+
+.paywall-text {
+    margin: 10px 0 0;
+
+    font-size: 14px;
+    line-height: 1.45;
+
+    opacity: 0.75;
+}
+
+.paywall-list {
+    margin: 16px 0 22px;
+    padding: 0;
+
+    list-style: none;
+
+    text-align: left;
+
+    font-size: 14px;
+}
+
+.paywall-list li {
+    padding: 6px 0 6px 26px;
+
+    position: relative;
+}
+
+.paywall-list li::before {
+    content: "✓";
+
+    position: absolute;
+    left: 4px;
+
+    color: #e85b6b;
+}
+
+.paywall-buy {
+    width: 100%;
+
+    padding: 15px;
+
+    border: none;
+    border-radius: 16px;
+
+    background: #e85b6b;
+
+    color: white;
+
+    font-family: inherit;
+    font-size: 16px;
+
+    cursor: pointer;
+}
+
+.paywall-buy:active {
+    transform: scale(0.97);
+}
+
+.paywall-later {
+    width: 100%;
+
+    margin-top: 8px;
+    padding: 12px;
+
+    border: none;
+
+    background: none;
+
+    color: rgba(255, 255, 255, 0.7);
+
+    font-family: inherit;
+    font-size: 14px;
+
+    cursor: pointer;
+}

@@ -1,4 +1,3 @@
-
 @font-face {
     font-family: "Jonova";
     src: url("fonts/Jonova-Regular.ttf") format("truetype");
@@ -7,14 +6,24 @@
 
 * {
     box-sizing: border-box;
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    overflow: hidden;
 }
 
 
 body {
-    margin: 0;
-
-    height: 100vh;
-
     font-family: "Jonova", sans-serif;
 
     background-image: url("backgrounds/background1.jpg");
@@ -25,8 +34,16 @@ body {
 }
 
 
+/*
+ * Высота чата.
+ * --app-height выставляет chat.js по реальной видимой области
+ * (она уменьшается, когда открыта клавиатура).
+ * Если JS ещё не отработал — dvh, а в старых браузерах — vh.
+ */
+
 .chat {
     height: 100vh;
+    height: var(--app-height, 100dvh);
 
     display: flex;
     flex-direction: column;
@@ -40,76 +57,135 @@ body {
    ========================= */
 
 .chat-header {
-    height: 75px;
+    flex-shrink: 0;
+
+    min-height: 75px;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    gap: 10px;
+
+    padding: max(10px, env(safe-area-inset-top)) 16px 10px;
+
     background: rgba(255, 255, 255, 0.1);
+
     backdrop-filter: blur(1px);
-    border-bottom:  solid rgba(255, 255, 255, 0.1);
-    padding: 10px 16px;
+    -webkit-backdrop-filter: blur(1px);
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
+
+
+/* Кнопка "назад" и аватар одного размера,
+   поэтому имя посередине действительно по центру */
+
 .logo-button {
-    height: 80%;
-    width: 20%;
+    width: 52px;
+    height: 52px;
+
+    flex-shrink: 0;
 
     display: flex;
     justify-content: center;
     align-items: center;
 
-    border-radius: 25px;
+    border-radius: 50%;
+
     background: rgba(255, 255, 255, 0.3);
 
     backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
+
+.button-logo {
+    width: 26px;
+    height: 26px;
+
+    object-fit: contain;
+}
+
+
+.avatar-link {
+    flex-shrink: 0;
+
+    display: block;
+}
+
+
 .chat-avatar {
-    cursor: pointer;
+    display: block;
+
     width: 52px;
     height: 52px;
 
+    cursor: pointer;
+
+    object-fit: cover;
+
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.3); 
-    /* прозрачность 0.15 и 0.2 */
+
+    background: rgba(255, 255, 255, 0.3);
 
     backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
 
     border: 3px solid rgba(255, 255, 255, 0.3);
-    object-fit: cover;
-    /* margin-left: 5%; */
-    margin-left: 2px;
 }
 
 
 .chat-info {
-    height: 80%;
-    width: 170px;
+    flex: 1;
+
+    min-width: 0;
+    max-width: 200px;
+    height: 52px;
+
+    padding: 0 14px;
+
     display: flex;
     flex-direction: column;
-    text-align: center;
     justify-content: center;
     align-items: center;
+
+    text-align: center;
+
     border-radius: 25px;
-    background: rgba(255, 255, 255, 0.3); 
-    /* прозрачность 0.15 и 0.2 */
+
+    background: rgba(255, 255, 255, 0.3);
 
     backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+
+.chat-name,
+.chat-status {
+    max-width: 100%;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 
 .chat-name {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
+
+    line-height: 1.15;
 }
 
 
 .chat-status {
-    font-size: 13px;
+    font-size: 12px;
 
     opacity: 0.7;
 
@@ -124,18 +200,25 @@ body {
 .messages {
     flex: 1;
 
+    min-height: 0;
+
     display: flex;
     flex-direction: column;
 
     gap: 10px;
 
-    padding: 20px;
+    padding: 20px 16px;
 
     overflow-y: auto;
+    overscroll-behavior: contain;
+
+    -webkit-overflow-scrolling: touch;
 }
 
 
 .message {
+    flex-shrink: 0;
+
     max-width: 75%;
 
     padding: 10px 14px;
@@ -146,7 +229,7 @@ body {
 
     line-height: 1.4;
 
-    word-wrap: break-word;
+    overflow-wrap: anywhere;
 }
 
 
@@ -156,6 +239,7 @@ body {
     background: rgba(255, 255, 255, 0.2);
 
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 
     border-bottom-left-radius: 5px;
 }
@@ -175,15 +259,19 @@ body {
    ========================= */
 
 .message-input {
+    flex-shrink: 0;
+
     display: flex;
+    align-items: center;
 
     gap: 10px;
 
-    padding: 12px 15px;
+    padding: 12px 15px max(12px, env(safe-area-inset-bottom));
 
     background: rgba(255, 255, 255, 0.15);
 
     backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
 
     border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
@@ -191,6 +279,8 @@ body {
 
 .message-input input {
     flex: 1;
+
+    min-width: 0;
 
     height: 45px;
 
@@ -217,9 +307,19 @@ body {
 }
 
 
+/* flex-shrink: 0 — иначе на узком экране кнопка сплющивается в овал */
+
 .message-input button {
     width: 45px;
     height: 45px;
+
+    flex-shrink: 0;
+
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     border: none;
 
@@ -247,4 +347,3 @@ body {
 .message-input button:active {
     transform: scale(0.95);
 }
-

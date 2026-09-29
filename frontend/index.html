@@ -20,15 +20,13 @@
 
     <main class="home">
 
-        <!-- =========================
-             ВЕРХНЯЯ ЧАСТЬ
-             ========================= -->
+        <!-- ВЕРХНЯЯ ЧАСТЬ -->
 
         <header class="header">
 
             <h1>Твой календарь</h1>
 
-            <button class="calendar-button">
+            <button class="calendar-button" id="calendarButton">
                 <img
                     src="icons/calendar.png"
                     alt="Календарь"
@@ -38,77 +36,40 @@
         </header>
 
 
-        <!-- =========================
-             ЛЕНТА ДАТ
-             ========================= -->
+        <!-- ЛЕНТА ДАТ (заполняется в index.js по текущей дате) -->
 
-        <section class="date-strip">
-
-            <div class="date">
-                <span class="weekday">ПН</span>
-                <span class="number">28</span>
-            </div>
-
-            <div class="date today">
-                <span class="weekday">ВТ</span>
-                <span class="number">29</span>
-            </div>
-
-            <div class="date">
-                <span class="weekday">СР</span>
-                <span class="number">30</span>
-            </div>
-
-            <div class="date">
-                <span class="weekday">ЧТ</span>
-                <span class="number">1</span>
-            </div>
-
-            <div class="date">
-                <span class="weekday">ПТ</span>
-                <span class="number">2</span>
-            </div>
-
-            <div class="date">
-                <span class="weekday">СБ</span>
-                <span class="number">3</span>
-            </div>
-
-            <div class="date">
-                <span class="weekday">ВС</span>
-                <span class="number">4</span>
-            </div>
-
-        </section>
+        <section class="date-strip" id="dateStrip"></section>
 
 
-        <!-- =========================
-             ОСНОВНОЙ КОНТЕНТ
-             ========================= -->
+        <!-- ОСНОВНОЙ КОНТЕНТ -->
 
         <section class="content">
 
-
-            <!-- ЦИКЛ -->
+            <!-- ЦИКЛ: сначала прогноз, потом день цикла -->
 
             <div class="cycle-card">
 
-                <div class="card-title">
-                    Твой цикл
+                <div class="cycle-next" id="cycleNext"></div>
+
+                <div class="cycle-info">
+
+                    <div class="card-title">
+                        Твой цикл
+                    </div>
+
+                    <div class="cycle-day-wrap">
+                        <span class="cycle-day" id="cycleDay">–</span>
+                        <span class="cycle-label" id="cycleLabel">день цикла</span>
+                    </div>
+
                 </div>
 
-                <div class="cycle-day">
-                    14
-                </div>
-
-                <div class="cycle-label">
-                    день цикла
-                </div>
-
-                <div class="cycle-next">
-                    Месячные начнутся через
-                    <strong>14 дней</strong>
-                </div>
+                <button
+                    class="period-button"
+                    id="periodButton"
+                >
+                    🔴 Отметить месячные
+                </button>
 
             </div>
 
@@ -121,89 +82,141 @@
                     Сегодня
                 </div>
 
-                <div class="today-question">
+                <div class="today-question" id="todayQuestion">
                     Как ты себя чувствуешь?
                 </div>
 
-                <button class="action-button">
+                <button class="action-button" id="symptomsButton">
                     Отметить симптомы
                 </button>
 
             </div>
 
-
-            <!-- КАЛЕНДАРЬ -->
-
-            <button class="calendar-card">
-
-                <img
-                    src="icons/calendar.png"
-                    alt=""
-                >
-
-                <div>
-                    <div class="calendar-card-title">
-                        Календарь
-                    </div>
-
-                    <div class="calendar-card-text">
-                        Посмотреть весь цикл
-                    </div>
-                </div>
-
-                <span class="arrow">
-                    ›
-                </span>
-
-            </button>
-
-
         </section>
 
 
-        <!-- =========================
-             НИЖНЯЯ НАВИГАЦИЯ
-             ========================= -->
+        <!-- НИЖНЯЯ НАВИГАЦИЯ -->
 
         <nav class="bottom-navigation">
 
-            <a
-                href="index.html"
-                class="nav-button active"
-            >
-                <img
-                    src="icons/homepage.png"
-                    alt="Главная"
-                >
+            <a href="index.html" class="nav-button active">
+                <img src="icons/homepage.png" alt="Главная">
             </a>
 
-
-            <a
-                href="chat.html"
-                class="nav-button"
-            >
-                <img
-                    src="icons/chat.png"
-                    alt="Чат"
-                >
+            <a href="messages.html" class="nav-button">
+                <img src="icons/chat.png" alt="Чат">
             </a>
 
-
-            <a
-                href="settings.html"
-                class="nav-button"
-            >
-                <img
-                    src="icons/settings.png"
-                    alt="Настройки"
-                >
+            <a href="settings.html" class="nav-button">
+                <img src="icons/settings.png" alt="Настройки">
             </a>
 
         </nav>
 
+
+        <!-- КАЛЕНДАРЬ -->
+
+        <div class="calendar-overlay" id="calendarOverlay">
+
+            <div class="calendar-modal">
+
+                <div class="calendar-modal-header">
+
+                    <div>
+                        <div class="calendar-title">Календарь</div>
+
+                        <div class="calendar-mode-text" id="calendarModeText">
+                            Нажми на первый день месячных
+                        </div>
+                    </div>
+
+                    <button class="calendar-close" id="calendarClose">×</button>
+
+                </div>
+
+                <div class="calendar-scroll" id="calendarScroll">
+                    <!-- Месяцы создаются через JS -->
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- САМОЧУВСТВИЕ -->
+
+        <div class="calendar-overlay" id="symptomsOverlay">
+
+            <div class="calendar-modal symptoms-modal">
+
+                <div class="calendar-modal-header">
+
+                    <div>
+                        <div class="calendar-title">Как ты сегодня?</div>
+
+                        <div class="calendar-mode-text">
+                            Отметь, что чувствуешь. Это поможет мне поддержать тебя
+                        </div>
+                    </div>
+
+                    <button class="calendar-close" id="symptomsClose">×</button>
+
+                </div>
+
+                <div class="symptoms-body">
+
+                    <div class="symptoms-section">
+                        <div class="symptoms-section-title">Настроение</div>
+                        <div class="mood-row" id="moodRow"></div>
+                    </div>
+
+                    <div class="symptoms-section">
+                        <div class="symptoms-section-title">Тело</div>
+                        <div class="chips" id="bodyChips"></div>
+                    </div>
+
+                    <div class="symptoms-section">
+                        <div class="symptoms-section-title">Эмоции</div>
+                        <div class="chips" id="emotionChips"></div>
+                    </div>
+
+                    <div class="symptoms-section">
+                        <div class="symptoms-section-title">Насколько сильная боль?</div>
+                        <div class="pain-row" id="painRow"></div>
+
+                        <div class="pain-hint" id="painHint">
+                            Если боль очень сильная или необычная, лучше рассказать
+                            взрослому, которому доверяешь, или показаться врачу.
+                        </div>
+                    </div>
+
+                    <div class="symptoms-section">
+                        <div class="symptoms-section-title">Хочешь что-то добавить?</div>
+
+                        <textarea
+                            class="symptoms-note"
+                            id="symptomsNote"
+                            maxlength="200"
+                            placeholder="Например: поругалась с подругой"
+                        ></textarea>
+                    </div>
+
+                </div>
+
+                <div class="symptoms-footer">
+                    <button class="symptoms-save" id="symptomsSave">
+                        Сохранить
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
     </main>
 
 
+    <script src="cycle-data.js"></script>
     <script src="index.js"></script>
 
 </body>

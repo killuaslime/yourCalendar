@@ -22,20 +22,20 @@ let currentIndex = 0;
    ПРОФИЛЬ ПЕРСОНАЖА
    ===================================================== */
 
-const characterProfile = {
+const characterId = urlParams.get("id");
 
-    name: "Луна",
+const characterProfile =
+    (typeof getCharacter === "function" && getCharacter(characterId)) || {
 
-    username: "@luna_calendar",
+        name: "Луна",
 
-    avatars: [
-        "avatars/luna/avatar1.png",
-        "avatars/luna/avatar2.png",
-        "avatars/luna/avatar3.png",
-        "avatars/luna/avatar4.png"
-    ]
+        username: "@luna_calendar",
 
-};
+        avatars: [
+            "avatars/luna/avatar1.png"
+        ]
+
+    };
 
 
 /* =====================================================

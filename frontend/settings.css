@@ -1,0 +1,104 @@
+body {
+    margin: 0;
+
+    height: 100vh;
+
+    font-family: "Jonova", sans-serif;
+
+    background-image: url("backgrounds/background1.jpg");
+    background-size: cover;
+    background-position: center;
+
+    color: white;
+}
+.settings-header{
+    position: relative;
+}
+
+.user-avatar{
+    height: 35%;
+    width: 100%;
+    display: block;
+}
+.settings-info{
+    color: white;
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+.button-logo{
+    position: absolute;
+    width: 15%;
+
+}
+
+.settings-theme{
+    top: 0%;
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    text-align: center;
+}
+
+
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.toggle input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #333;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: #FFF;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #060;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+.choose-background{
+    color: white;
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}

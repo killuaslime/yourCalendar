@@ -2,11 +2,14 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
     <title>Сообщения</title>
 
-    <link rel="stylesheet" href="chat.css">
+    <link rel="stylesheet" href="styles/chat.css">
+
+    <link rel="stylesheet" href="styles/transitions.css">
+    <script src="scripts/transitions.js"></script>
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
@@ -18,7 +21,7 @@
         <!-- Шапка чата (имя и аватар подставляет chat.js) -->
         <div class="chat-header">
 
-            <a href="messages.html" class="logo-button">
+            <a href="messages.html" class="logo-button" data-back>
                 <img src="icons/back.png" alt="Назад" class="button-logo">
             </a>
 
@@ -63,8 +66,10 @@
     </div>
 
 
-    <script src="characters.js"></script>
-    <script src="chat.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/characters.js"></script>
+    <script src="scripts/cycle-data.js"></script>
+    <script src="scripts/chat.js"></script>
 
 </body>
 </html>

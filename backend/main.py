@@ -2,7 +2,7 @@ import asyncio
 
 from aiogram import Bot, Dispatcher
 from aiogram.filters import CommandStart
-from aiogram.types import Message
+from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
 
 from dotenv import load_dotenv
 import os
@@ -10,16 +10,27 @@ from database.database import SessionLocal, engine, Base
 from database.models import User, Subscription
 from sqlalchemy import select
 
-
 load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN")
 
 
 
 dp = Dispatcher()
-
+webapp_keyboard = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(
+                text="📅 Открыть календарь",
+                web_app=WebAppInfo(
+                    url=os.getenv("WEB_URL")
+                )
+            )
+        ]
+    ]
+)
 
 @dp.message(CommandStart())
+
 async def start_handler(message: Message):
     async with SessionLocal() as session:
 
@@ -43,10 +54,12 @@ async def start_handler(message: Message):
             await session.commit()
             await session.refresh(user)
 
-            await message.answer("Привет! Ты зарегистрирован ❤️")
-
-        else:
-            await message.answer("С возвращением ❤️")
+        await message.answer(
+        "Привет! ❤️\n\n"
+        "Добро пожаловать в yourCalendar.\n"
+        "Открой календарь, чтобы продолжить:",
+        reply_markup=webapp_keyboard
+        )
 
         result = await session.execute(
             select(Subscription).where(

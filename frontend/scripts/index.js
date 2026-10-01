@@ -9,7 +9,8 @@ if (tg) {
     tg.ready();
     tg.expand();
 }
-
+const tgInitData = Telegram.WebApp.initData
+console.log(tgInitData)
 
 /* =========================================================
    ЭЛЕМЕНТЫ

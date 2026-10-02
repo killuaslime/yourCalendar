@@ -9,8 +9,26 @@ if (tg) {
     tg.ready();
     tg.expand();
 }
-const tgInitData = Telegram.WebApp.initData
-console.log(tgInitData)
+const initData = window.Telegram.WebApp.initData;
+
+// Пример отправки POST запроса:
+async function postMe(url = "https://functionality-lifetime-possibly-inexpensive.trycloudflare.com/api/auth/telegram") {
+    const response = await fetch(url, {
+        method: "POST",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            initData: initData
+        })
+    });
+
+    const result = await response.json();
+    console.log(result);
+}
+
+postMe();
 
 /* =========================================================
    ЭЛЕМЕНТЫ

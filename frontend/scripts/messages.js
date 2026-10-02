@@ -1,6 +1,7 @@
 /* =========================================================
    messages.js — список персонажей
-   Нужен characters.js (подключить ДО этого файла)
+   Требует:
+   - characters.js подключён ДО этого файла
    ========================================================= */
 
 const tg = window.Telegram?.WebApp;
@@ -9,6 +10,11 @@ if (tg) {
     tg.ready();
     tg.expand();
 }
+
+
+/* =========================================================
+   DOM
+   ========================================================= */
 
 const contactList = document.getElementById("contactList");
 
@@ -19,213 +25,708 @@ const paywallClose = document.getElementById("paywallClose");
 const paywallLater = document.getElementById("paywallLater");
 const paywallBuy = document.getElementById("paywallBuy");
 
-// персонаж, на которого нажали, пока не было подписки
 let pendingCharacter = null;
 
 
 /* =========================================================
-   СПИСОК
+   ПОСТРОЕНИЕ СТРОКИ ПЕРСОНАЖА
    ========================================================= */
 
-function buildRow(character) {
-    const open = canChatWith(character.id);
+async function buildRow(character) {
 
-    let previewText;
-    let ts;
-    let unread;
+    const open = await canChatWith(character.id);
+
+    let previewText = "";
+    let ts = Date.now();
+    let unread = 0;
+
+
+    /* =====================================================
+       ОТКРЫТЫЙ ЧАТ
+       ===================================================== */
 
     if (open) {
 
-        const history = getHistory(character.id);
-        const last = history[history.length - 1];
+        const history = await getHistory(character.id);
 
-        previewText = (last.from === "user" ? "Ты: " : "") + last.text;
-        ts = last.ts;
-        unread = getUnreadCount(character.id);
+        /*
+         * История может быть пустой.
+         * Поэтому обязательно проверяем last.
+         */
 
-    } else {
+        const last = history?.[history.length - 1];
 
-        // Закрытый чат: видно, что персонаж написал, но текст размыт
-        previewText = character.intro[character.intro.length - 1];
-        ts = getTeaserTs(character.id, character.teaserMinutesAgo);
-        unread = 1;
+        if (last) {
+
+            previewText =
+                (last.from === "user" ? "Ты: " : "") +
+                (last.text || "");
+
+            ts = last.ts || Date.now();
+
+        } else {
+
+            previewText =
+                character.ai?.greeting ||
+                "Начать разговор";
+
+            ts = Date.now();
+        }
+
+
+        unread = await getUnreadCount(character.id);
 
     }
 
-    const row = document.createElement("div");
-    row.className = "contact-row";
-    row.dataset.ts = ts;
 
-    row.appendChild(createAvatar(character, "contact-avatar"));
+    /* =====================================================
+       ЗАКРЫТЫЙ ЧАТ
+       ===================================================== */
+
+    else {
+
+        previewText =
+            character.ai?.greeting ||
+            "Новое сообщение";
+
+        ts = getTeaserTs(character.id, 10);
+
+        unread = 1;
+    }
+
+
+    /* =====================================================
+       ROW
+       ===================================================== */
+
+    const row = document.createElement("div");
+
+    row.className = "contact-row";
+
+    row.dataset.characterId = character.id;
+    row.dataset.ts = String(ts);
+
+
+    /* =====================================================
+       AVATAR
+       ===================================================== */
+
+    row.appendChild(
+        createAvatar(
+            character,
+            "contact-avatar"
+        )
+    );
+
+
+    /* =====================================================
+       BODY
+       ===================================================== */
 
     const body = document.createElement("div");
+
     body.className = "contact-body";
 
-    /* верх: имя + время */
+
+    /* =====================================================
+       TOP
+       ===================================================== */
 
     const top = document.createElement("div");
+
     top.className = "contact-top";
 
+
     const name = document.createElement("span");
+
     name.className = "contact-name";
-    name.textContent = character.name;
+
+    name.textContent =
+        character.name || "Персонаж";
+
 
     const time = document.createElement("span");
+
     time.className = "contact-time";
-    time.textContent = formatListTime(ts);
 
-    top.append(name, time);
+    time.textContent =
+        formatListTime(ts);
 
-    /* низ: превью + счётчик */
+
+    top.append(
+        name,
+        time
+    );
+
+
+    /* =====================================================
+       BOTTOM
+       ===================================================== */
 
     const bottom = document.createElement("div");
+
     bottom.className = "contact-bottom";
 
-    const previewWrap = document.createElement("div");
-    previewWrap.className = "contact-preview-wrap";
+
+    /* =====================================================
+       PREVIEW
+       ===================================================== */
+
+    const previewWrap =
+        document.createElement("div");
+
+    previewWrap.className =
+        "contact-preview-wrap";
+
+
+    /* =====================================================
+       LOCK
+       ===================================================== */
 
     if (!open) {
-        const lock = document.createElement("span");
-        lock.className = "contact-lock";
+
+        const lock =
+            document.createElement("span");
+
+        lock.className =
+            "contact-lock";
+
         lock.textContent = "🔒";
+
         previewWrap.appendChild(lock);
     }
 
-    const preview = document.createElement("span");
-    preview.className = "contact-preview";
-    preview.textContent = previewText;
 
-    if (!open) preview.classList.add("locked");
+    /* =====================================================
+       TEXT
+       ===================================================== */
+
+    const preview =
+        document.createElement("span");
+
+    preview.className =
+        "contact-preview";
+
+    preview.textContent =
+        previewText;
+
+
+    if (!open) {
+
+        preview.classList.add("locked");
+    }
+
 
     previewWrap.appendChild(preview);
+
     bottom.appendChild(previewWrap);
 
+
+    /* =====================================================
+       UNREAD
+       ===================================================== */
+
     if (unread > 0) {
-        const badge = document.createElement("span");
-        badge.className = "contact-badge";
-        badge.textContent = unread;
+
+        const badge =
+            document.createElement("span");
+
+        badge.className =
+            "contact-badge";
+
+        badge.textContent =
+            unread > 99 ? "99+" : unread;
+
         bottom.appendChild(badge);
     }
 
-    body.append(top, bottom);
+
+    /* =====================================================
+       ASSEMBLE
+       ===================================================== */
+
+    body.append(
+        top,
+        bottom
+    );
+
     row.appendChild(body);
 
-    row.addEventListener("click", () => {
-        if (canChatWith(character.id)) {
-            openChat(character.id);
-        } else {
-            openPaywall(character);
+
+    /* =====================================================
+       CLICK
+       ===================================================== */
+
+    row.addEventListener(
+        "click",
+        async () => {
+
+            const allowed =
+                await canChatWith(character.id);
+
+
+            if (allowed) {
+
+                openChat(character.id);
+
+            } else {
+
+                openPaywall(character);
+            }
         }
-    });
+    );
+
 
     return row;
 }
 
-function renderContacts() {
-    contactList.innerHTML = "";
 
-    const rows = CHARACTERS.map(buildRow);
+/* =========================================================
+   ПРЕДСТАВИТЕЛИ ВСЕЛЕННЫХ
+   ========================================================= */
 
-    // новые сверху, как в Телеграме
-    rows.sort((a, b) => Number(b.dataset.ts) - Number(a.dataset.ts));
+/*
+ * Показываем только одного персонажа из каждой вселенной.
+ * Первый персонаж в characters.json становится представителем,
+ * поэтому выбор остаётся стабильным и предсказуемым.
+ */
+function getUniverseRepresentatives() {
 
-    rows.forEach(row => contactList.appendChild(row));
-}
+    const seenUniverses = new Set();
 
-function openChat(id) {
-    window.location.href = `chat.html?id=${encodeURIComponent(id)}`;
+
+    return CHARACTERS.filter(
+        character => {
+
+            const universe =
+                character.universe ||
+                "unknown";
+
+
+            if (seenUniverses.has(universe)) {
+
+                return false;
+
+            }
+
+
+            seenUniverses.add(universe);
+
+            return true;
+
+        }
+    );
+
 }
 
 
 /* =========================================================
-   ОКНО ПОДПИСКИ
+   РЕНДЕР СПИСКА
+   ========================================================= */
+
+let contactsRenderInProgress = false;
+
+
+async function renderContacts() {
+
+    /*
+     * pageshow и первоначальный запуск могут произойти почти одновременно.
+     * Не допускаем два асинхронных рендера одного списка.
+     */
+    if (contactsRenderInProgress) {
+
+        return;
+
+    }
+
+
+    contactsRenderInProgress = true;
+
+
+    try {
+
+        console.log(
+        "renderContacts: начало"
+    );
+
+
+    /* =====================================================
+       ЖДЁМ ЗАГРУЗКУ ПЕРСОНАЖЕЙ
+       ===================================================== */
+
+    await charactersReady;
+
+
+    console.log(
+        "renderContacts: персонажи загружены",
+        CHARACTERS.length
+    );
+
+
+    /* =====================================================
+       ПРОВЕРКА DOM
+       ===================================================== */
+
+    if (!contactList) {
+
+        console.error(
+            "renderContacts: #contactList не найден"
+        );
+
+        return;
+    }
+
+
+    /* =====================================================
+       СОЗДАНИЕ ROW
+       ===================================================== */
+
+    const rows = [];
+    const representatives =
+        getUniverseRepresentatives();
+
+
+    for (const character of representatives) {
+
+        try {
+
+            const row =
+                await buildRow(character);
+
+            rows.push(row);
+
+        } catch (error) {
+
+            console.error(
+                `Ошибка персонажа ${character.id}:`,
+                error
+            );
+        }
+    }
+
+
+    /* =====================================================
+       СОРТИРОВКА
+       ===================================================== */
+
+    rows.sort(
+        (a, b) => {
+
+            return (
+                (Number(b.dataset.ts) || 0) -
+                (Number(a.dataset.ts) || 0)
+            );
+        }
+    );
+
+
+    /* =====================================================
+       ДОБАВЛЕНИЕ В DOM
+       ===================================================== */
+
+    /*
+     * Заменяем содержимое только после полной сборки и сортировки.
+     * Это не оставляет старые строки при повторном обновлении.
+     */
+    contactList.replaceChildren(...rows);
+
+
+        console.log(
+            "renderContacts: готово",
+            rows.length
+        );
+
+    } finally {
+
+        contactsRenderInProgress = false;
+
+    }
+}
+
+
+/* =========================================================
+   ОТКРЫТЬ ЧАТ
+   ========================================================= */
+
+function openChat(id) {
+
+    window.location.href =
+        `chat.html?id=${encodeURIComponent(id)}`;
+}
+
+
+/* =========================================================
+   PAYWALL
    ========================================================= */
 
 function openPaywall(character) {
+
     pendingCharacter = character;
 
-    paywallAvatar.innerHTML = "";
-    paywallAvatar.appendChild(createAvatar(character, "contact-avatar"));
 
-    paywallTitle.textContent = `${character.name} написала тебе`;
+    /* Очистить старый avatar */
+
+    paywallAvatar.innerHTML = "";
+
+
+    /* Новый avatar */
+
+    paywallAvatar.appendChild(
+        createAvatar(
+            character,
+            "contact-avatar"
+        )
+    );
+
+
+    /* Заголовок */
+
+    paywallTitle.textContent =
+        `${character.name} написала тебе`;
+
+
+    /* Показать */
 
     paywallOverlay.classList.add("open");
-    document.body.style.overflow = "hidden";
+
+    document.body.style.overflow =
+        "hidden";
 }
 
+
+/* =========================================================
+   ЗАКРЫТЬ PAYWALL
+   ========================================================= */
+
 function closePaywall() {
-    paywallOverlay.classList.remove("open");
+
+    paywallOverlay.classList.remove(
+        "open"
+    );
+
     document.body.style.overflow = "";
 }
 
+
+/* =========================================================
+   ПОКУПКА
+   ========================================================= */
+
 function buy() {
+
     if (DEV_MODE) {
-        // Тестовый режим: подписка включается сразу.
+
+        /*
+         * Тестовый режим.
+         * Открываем премиум всем.
+         */
+
         setPremium(true);
+
         closePaywall();
 
+
         if (pendingCharacter) {
-            openChat(pendingCharacter.id);
+
+            openChat(
+                pendingCharacter.id
+            );
+
         } else {
+
             renderContacts();
         }
 
         return;
     }
 
+
     /*
-     * TODO (боевой режим):
-     * 1. POST /api/subscription/invoice → сервер создаёт счёт
-     * 2. tg.openInvoice(invoiceUrl, status => { ... })
-     * 3. подписку подтверждает СЕРВЕР (через webhook бота),
-     *    а не браузер
+     * TODO:
+     *
+     * POST /api/subscription/invoice
+     *
+     * Сервер создаёт Telegram Invoice.
      */
+
+
     if (tg?.showAlert) {
-        tg.showAlert("Оплата скоро появится");
+
+        tg.showAlert(
+            "Оплата скоро появится"
+        );
+
     } else {
-        alert("Оплата скоро появится");
+
+        alert(
+            "Оплата скоро появится"
+        );
     }
 }
 
-paywallBuy.addEventListener("click", buy);
-paywallClose.addEventListener("click", closePaywall);
-paywallLater.addEventListener("click", closePaywall);
 
-paywallOverlay.addEventListener("click", event => {
-    if (event.target === paywallOverlay) closePaywall();
-});
+/* =========================================================
+   EVENTS
+   ========================================================= */
 
-document.addEventListener("keydown", event => {
-    if (event.key === "Escape") closePaywall();
-});
+if (paywallBuy) {
+
+    paywallBuy.addEventListener(
+        "click",
+        buy
+    );
+}
+
+
+if (paywallClose) {
+
+    paywallClose.addEventListener(
+        "click",
+        closePaywall
+    );
+}
+
+
+if (paywallLater) {
+
+    paywallLater.addEventListener(
+        "click",
+        closePaywall
+    );
+}
+
+
+if (paywallOverlay) {
+
+    paywallOverlay.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target ===
+                paywallOverlay
+            ) {
+
+                closePaywall();
+            }
+        }
+    );
+}
 
 
 /* =========================================================
-   ПЕРЕХОДЫ И ОБНОВЛЕНИЕ
+   ESC
    ========================================================= */
 
-document.querySelectorAll("a").forEach(link => {
-    link.addEventListener("click", function (event) {
-        event.preventDefault();
+document.addEventListener(
+    "keydown",
+    event => {
 
-        const destination = this.href;
+        if (event.key === "Escape") {
 
-        document.body.classList.add("page-exit");
+            closePaywall();
+        }
+    }
+);
 
-        setTimeout(() => {
-            window.location.href = destination;
-        }, 300);
-    });
-});
 
-// возврат из чата (в том числе из кэша браузера) — обновляем список
-window.addEventListener("pageshow", () => {
-    document.body.classList.remove("page-exit");
-    renderContacts();
-});
+/* =========================================================
+   ПЕРЕХОДЫ МЕЖДУ СТРАНИЦАМИ
+   ========================================================= */
 
-document.addEventListener("visibilitychange", () => {
-    if (!document.hidden) renderContacts();
-});
+document.querySelectorAll("a").forEach(
+    link => {
 
-renderContacts();
+        link.addEventListener(
+            "click",
+            function (event) {
+
+                event.preventDefault();
+
+
+                const destination =
+                    this.href;
+
+
+                document.body.classList.add(
+                    "page-exit"
+                );
+
+
+                setTimeout(
+                    () => {
+
+                        window.location.href =
+                            destination;
+
+                    },
+                    300
+                );
+            }
+        );
+    }
+);
+
+
+/* =========================================================
+   ВОЗВРАТ НА СТРАНИЦУ
+   ========================================================= */
+
+window.addEventListener(
+    "pageshow",
+    () => {
+
+        document.body.classList.remove(
+            "page-exit"
+        );
+
+        renderContacts().catch(
+            error => {
+
+                console.error(
+                    "Ошибка renderContacts:",
+                    error
+                );
+            }
+        );
+    }
+);
+
+
+/* =========================================================
+   ПЕРЕКЛЮЧЕНИЕ ВКЛАДКИ
+   ========================================================= */
+
+document.addEventListener(
+    "visibilitychange",
+    () => {
+
+        if (!document.hidden) {
+
+            renderContacts().catch(
+                error => {
+
+                    console.error(
+                        "Ошибка обновления списка:",
+                        error
+                    );
+                }
+            );
+        }
+    }
+);
+
+
+/* =========================================================
+   START
+   ========================================================= */
+
+renderContacts().catch(
+    error => {
+
+        console.error(
+            "Ошибка запуска списка:",
+            error
+        );
+    }
+);

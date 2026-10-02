@@ -1,223 +1,725 @@
-/* =========================================================
-   chat.js — переписка с персонажем
-   Нужен characters.js (подключить ДО этого файла)
-   ========================================================= */
+/* =====================================================
+   TELEGRAM
+   ===================================================== */
 
 const tg = window.Telegram?.WebApp;
 
 if (tg) {
+
     tg.ready();
     tg.expand();
-}
-
-const params = new URLSearchParams(window.location.search);
-
-const character =
-    getCharacter(params.get("id")) ||
-    getCharacter(getFreeCharacterId());
-
-
-/*
- * Защита: в чат без подписки попасть нельзя.
- * (Это только интерфейс. Настоящую проверку должен делать
- * сервер при каждом запросе к ИИ.)
- */
-
-if (!canChatWith(character.id)) {
-
-    window.location.replace("messages.html");
-
-} else {
-
-    startChat();
 
 }
 
 
-function startChat() {
+/* =====================================================
+   ПОЛУЧАЕМ ПЕРСОНАЖА
+   ===================================================== */
 
-    const chatName = document.getElementById("chatName");
-    const chatStatus = document.getElementById("chatStatus");
-    const chatAvatar = document.getElementById("chatAvatar");
-    const avatarLink = document.getElementById("avatarLink");
-    const messagesBox = document.getElementById("messages");
-    const input = document.getElementById("message-input");
-    const sendButton = document.getElementById("send-button");
+const params =
+    new URLSearchParams(
+        window.location.search
+    );
 
-    /* ---- высота под клавиатуру ----
-       Когда открывается клавиатура, видимая область уменьшается.
-       Подгоняем чат под неё, чтобы поле ввода не уезжало вниз. */
+const characterId =
+    params.get("id");
 
-    function fitToViewport() {
-        const height = window.visualViewport
-            ? window.visualViewport.height
-            : window.innerHeight;
 
-        document.documentElement.style.setProperty("--app-height", `${height}px`);
+/* =====================================================
+   ЗАПУСК ЧАТА
+   ===================================================== */
 
-        window.scrollTo(0, 0);
+async function initChat() {
 
-        messagesBox.scrollTop = messagesBox.scrollHeight;
+    /*
+     * Ждём загрузки персонажей.
+     */
+
+    await charactersReady;
+
+
+    /*
+     * Получаем персонажа.
+     */
+
+    const character =
+        await getCharacter(characterId);
+
+
+    /*
+     * Если персонаж не найден —
+     * возвращаемся к списку.
+     */
+
+    if (!character) {
+
+        console.error(
+            "Персонаж не найден:",
+            characterId
+        );
+
+        window.location.replace(
+            "messages.html"
+        );
+
+        return;
+
     }
 
-    fitToViewport();
 
-    window.addEventListener("resize", fitToViewport);
-    window.visualViewport?.addEventListener("resize", fitToViewport);
-    window.visualViewport?.addEventListener("scroll", fitToViewport);
+    /*
+     * Проверяем доступ.
+     */
+
+    const canChat =
+        await canChatWith(character.id);
 
 
+    if (!canChat) {
 
-    /* ---- шапка ---- */
+        window.location.replace(
+            "messages.html"
+        );
 
-    chatName.textContent = character.name;
-    chatStatus.textContent = character.status;
+        return;
 
-    chatAvatar.src = character.avatar;
-    chatAvatar.alt = character.name;
+    }
+
+
+    startChat(character);
+
+}
+
+
+/* =====================================================
+   ЗАПУСК UI ЧАТА
+   ===================================================== */
+
+async function startChat(character) {
+
+    const chatName =
+        document.getElementById(
+            "chatName"
+        );
+
+
+    const chatStatus =
+        document.getElementById(
+            "chatStatus"
+        );
+
+
+    const chatAvatar =
+        document.getElementById(
+            "chatAvatar"
+        );
+
+
+    const avatarLink =
+        document.getElementById(
+            "avatarLink"
+        );
+
+
+    const messages =
+        document.getElementById(
+            "messages"
+        );
+
+
+    const input =
+        document.getElementById(
+            "message-input"
+        );
+
+
+    const sendButton =
+        document.getElementById(
+            "send-button"
+        );
+
+
+    /* =================================================
+       HEADER
+       ================================================= */
+
+    chatName.textContent =
+        character.name;
+
+
+    /*
+     * Статус теперь динамический.
+     *
+     * Не берём его из character.json.
+     */
+
+    chatStatus.textContent =
+        "В сети";
+
+
+    chatAvatar.src =
+        character.avatar;
+
+
+    chatAvatar.alt =
+        character.name;
+
 
     avatarLink.href =
-        `profile.html?type=character&id=${encodeURIComponent(character.id)}`;
+        `profile.html?type=character&id=${encodeURIComponent(
+            character.id
+        )}`;
 
-    document.title = character.name;
+
+    document.title =
+        character.name;
 
 
-    /* ---- сообщения ---- */
+    /* =================================================
+       ЗАГРУЗКА ИСТОРИИ
+       ================================================= */
 
-    function appendMessage(message) {
-        const element = document.createElement("div");
+    const history =
+        await getHistory(character.id);
 
-        element.className =
-            "message " +
-            (message.from === "user" ? "user-message" : "bot-message");
-
-        // textContent, а не innerHTML: текст пользователя нельзя вставлять как HTML
-        element.textContent = message.text;
-
-        messagesBox.appendChild(element);
-
-        messagesBox.scrollTop = messagesBox.scrollHeight;
-    }
-
-    getHistory(character.id).forEach(appendMessage);
 
     markRead(character.id);
 
 
-    /* ---- отправка ---- */
+    history.forEach(
+        message => {
 
-    function sendMessage() {
-        const text = input.value.trim();
+            appendMessage(
+                messages,
+                message.from,
+                message.text
+            );
 
-        if (!text || waiting) return;
+        }
+    );
+
+
+    scrollToBottom(messages);
+
+
+    /* =================================================
+       ОТПРАВКА
+       ================================================= */
+
+    async function sendMessage() {
+
+        const text =
+            input.value.trim();
+
+
+        if (!text) {
+
+            return;
+
+        }
+
+
+        /*
+         * Очищаем поле сразу.
+         */
 
         input.value = "";
 
-        appendMessage(addMessage(character.id, "user", text));
 
-        requestReply(text);
+        /*
+         * Показываем сообщение пользователя.
+         */
+
+        appendMessage(
+            messages,
+            "user",
+            text
+        );
+
+
+        scrollToBottom(messages);
+
+
+        /*
+         * Сохраняем сообщение.
+         */
+
+        await addMessage(
+            character.id,
+            "user",
+            text
+        );
+
+
+        /*
+         * Запрашиваем ответ.
+         */
+
+        await requestReply(
+            character,
+            text,
+            messages
+        );
+
     }
 
-    /* ---- ответ персонажа (через наш сервер, а он — к Gemini) ---- */
 
-    let waiting = false;
+    sendButton.addEventListener(
+        "click",
+        sendMessage
+    );
 
-    function setTyping(isTyping) {
-        chatStatus.textContent = isTyping ? "печатает…" : character.status;
-    }
 
-    function buildHistory() {
-        return getHistory(character.id)
-            .slice(-20)
-            .map(message => ({
-                role: message.from === "user" ? "user" : "bot",
-                text: message.text
-            }));
-    }
+    input.addEventListener(
+        "keydown",
+        event => {
 
-    function getContext() {
-        // контекст цикла и самочувствия (cycle-data.js);
-        // note (текст пользователя) на сервер не отправляем
-        if (typeof getAssistantContext !== "function") {
-            return { tone: "neutral", summary: "" };
-        }
+            if (
+                event.key === "Enter" &&
+                !event.shiftKey
+            ) {
 
-        const context = getAssistantContext();
+                event.preventDefault();
 
-        return { tone: context.tone, summary: context.summary };
-    }
+                sendMessage();
 
-    function showError() {
-        // сообщение об ошибке показываем, но в историю не сохраняем
-        appendMessage({
-            from: "bot",
-            text: "Не получилось ответить 😔 Попробуй ещё раз чуть позже."
-        });
-    }
-
-    async function requestReply() {
-
-        // без сервера (API_URL пустой) — тестовый ответ
-        if (!API_URL) {
-            if (!DEV_MODE) return;
-
-            setTimeout(() => {
-                appendMessage(
-                    addMessage(character.id, "bot", "Я тебя слышу 🤍 (тестовый ответ)")
-                );
-                markRead(character.id);
-            }, 800);
-
-            return;
-        }
-
-        waiting = true;
-        setTyping(true);
-
-        try {
-            const headers = { "Content-Type": "application/json" };
-
-            // Telegram подписывает данные пользователя — сервер их проверяет
-            if (tg?.initData) {
-                headers["Authorization"] = `tma ${tg.initData}`;
             }
 
-            const response = await fetch(`${API_URL}/api/chat`, {
-                method: "POST",
-                headers,
-                body: JSON.stringify({
-                    character_id: character.id,
-                    history: buildHistory(),
-                    ...getContext()
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}`);
-            }
-
-            const data = await response.json();
-
-            appendMessage(addMessage(character.id, "bot", data.reply));
-            markRead(character.id);
-
-        } catch (error) {
-            console.error("Ошибка чата:", error);
-            showError();
-
-        } finally {
-            waiting = false;
-            setTyping(false);
         }
+    );
+
+
+    /* =================================================
+       VIEWPORT
+       ================================================= */
+
+    function fitToViewport() {
+
+        const height =
+            window.visualViewport?.height ||
+            window.innerHeight;
+
+
+        document.documentElement.style
+            .setProperty(
+                "--app-height",
+                `${height}px`
+            );
+
     }
 
-    sendButton.addEventListener("click", sendMessage);
 
-    input.addEventListener("keydown", event => {
-        if (event.key === "Enter" && !event.isComposing) {
-            event.preventDefault();
-            sendMessage();
-        }
+    window.addEventListener(
+        "resize",
+        fitToViewport
+    );
+
+
+    if (window.visualViewport) {
+
+        window.visualViewport.addEventListener(
+            "resize",
+            fitToViewport
+        );
+
+        window.visualViewport.addEventListener(
+            "scroll",
+            fitToViewport
+        );
+
+    }
+
+
+    fitToViewport();
+
+}
+
+
+/* =====================================================
+   ДОБАВЛЕНИЕ СООБЩЕНИЯ В UI
+   ===================================================== */
+
+function appendMessage(
+    container,
+    from,
+    text
+) {
+
+    const message =
+        document.createElement("div");
+
+
+    message.classList.add(
+        "message",
+        from
+    );
+
+
+    /*
+     * Используем textContent,
+     * чтобы пользовательский текст
+     * не мог вставить HTML.
+     */
+
+    message.textContent =
+        text;
+
+
+    container.appendChild(
+        message
+    );
+
+}
+
+
+/* =====================================================
+   ПРОКРУТКА
+   ===================================================== */
+
+function scrollToBottom(
+    container
+) {
+
+    if (!container) {
+
+        return;
+
+    }
+
+
+    /*
+     * Выполняем прокрутку после перерасчёта layout,
+     * чтобы высота нового сообщения уже учитывалась.
+     */
+    requestAnimationFrame(() => {
+
+        container.scrollTop =
+            container.scrollHeight;
+
     });
 
 }
+
+
+/* =====================================================
+   ИСТОРИЯ ДЛЯ AI
+   ===================================================== */
+
+async function buildHistory(
+    characterId
+) {
+
+    const history =
+        await getHistory(
+            characterId
+        );
+
+
+    return history
+        .slice(-20)
+        .map(
+            message => ({
+                role:
+                    message.from === "user"
+                        ? "user"
+                        : "bot",
+
+                text:
+                    message.text
+            })
+        );
+
+}
+
+
+/* =====================================================
+   КОНТЕКСТ
+   ===================================================== */
+
+function getContext() {
+
+    /*
+     * Здесь пока оставляем
+     * твою существующую систему.
+     *
+     * Если cycle-data.js предоставляет
+     * getAssistantContext(), используем её.
+     */
+
+    if (
+        typeof getAssistantContext ===
+        "function"
+    ) {
+
+        return getAssistantContext();
+
+    }
+
+
+    return {};
+
+}
+
+
+/* =====================================================
+   ОШИБКА
+   ===================================================== */
+
+function showError(
+    container,
+    text
+) {
+
+    appendMessage(
+        container,
+        "bot",
+        text
+    );
+
+
+    scrollToBottom(
+        container
+    );
+
+}
+
+
+/* =====================================================
+   ОТВЕТ AI
+   ===================================================== */
+
+async function requestReply(
+    character,
+    text,
+    messages
+) {
+
+    /*
+     * Пока API_URL не настроен —
+     * используем DEV_MODE.
+     */
+
+    if (
+        typeof API_URL === "undefined" ||
+        !API_URL
+    ) {
+
+        if (DEV_MODE) {
+
+            messages.lastElementChild
+                ?.classList.add(
+                    "waiting"
+                );
+
+
+            setTimeout(
+                async () => {
+
+                    const reply =
+                        character.ai?.greeting ||
+                        "Я пока не умею отвечать.";
+
+
+                    appendMessage(
+                        messages,
+                        "bot",
+                        reply
+                    );
+
+
+                    await addMessage(
+                        character.id,
+                        "bot",
+                        reply
+                    );
+
+
+                    scrollToBottom(
+                        messages
+                    );
+
+                },
+                700
+            );
+
+
+            return;
+
+        }
+
+
+        showError(
+            messages,
+            "Сервер недоступен."
+        );
+
+        return;
+
+    }
+
+
+    /*
+     * Показываем динамический статус.
+     */
+
+    const chatStatus =
+        document.getElementById(
+            "chatStatus"
+        );
+
+
+    if (chatStatus) {
+
+        chatStatus.textContent =
+            "печатает...";
+
+    }
+
+
+    try {
+
+        const history =
+            await buildHistory(
+                character.id
+            );
+
+
+        const context =
+            getContext();
+
+
+        /*
+         * Получаем JWT из localStorage.
+         *
+         * Название ключа здесь должно
+         * совпадать с тем, которое
+         * использует твой auth-код.
+         */
+
+        const token = sessionStorage.getItem("yourCalendarAccessToken");
+
+
+        const headers = {
+
+            "Content-Type":
+                "application/json"
+
+        };
+
+
+        if (token) {
+
+            headers.Authorization =
+                `Bearer ${token}`;
+
+        }
+
+
+        const response =
+            await fetch(
+                `${API_URL}/api/chat/${encodeURIComponent(
+                    character.id
+                )}`,
+                {
+                    method: "POST",
+
+                    headers,
+
+                    body:
+                        JSON.stringify({
+                            message: text,
+                            history,
+                            ...context
+                        })
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `HTTP ${response.status}`
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        /*
+         * Наш backend сейчас возвращает
+         * поле message.
+         */
+
+        const reply =
+            data.reply ??
+            data.message;
+
+
+        if (!reply) {
+
+            throw new Error(
+                "Сервер не вернул ответ"
+            );
+
+        }
+
+
+        appendMessage(
+            messages,
+            "bot",
+            reply
+        );
+
+
+        await addMessage(
+            character.id,
+            "bot",
+            reply
+        );
+
+
+        scrollToBottom(
+            messages
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Ошибка отправки сообщения:",
+            error
+        );
+
+
+        showError(
+            messages,
+            "Не удалось получить ответ. Попробуй ещё раз."
+        );
+
+
+    } finally {
+
+        /*
+         * Возвращаем обычный статус.
+         */
+
+        if (chatStatus) {
+
+            chatStatus.textContent =
+                "В сети";
+
+        }
+
+    }
+
+}
+
+
+/* =====================================================
+   ЗАПУСК
+   ===================================================== */
+
+initChat();

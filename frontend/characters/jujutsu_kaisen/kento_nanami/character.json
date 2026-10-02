@@ -1,0 +1,19 @@
+{
+  "id": "kento_nanami",
+  "name": "Кэнто Нанами",
+  "universe": "jujutsu_kaisen",
+  "description": "Бывший маг и специалист по проклятиям.",
+  "access": "premium",
+  "avatar": "01.png",
+  "avatars": [
+    "01.png",
+    "02.png",
+    "03.png"
+  ],
+  "theme": {
+    "color": ""
+  },
+  "ai": {
+    "greeting": ""
+  }
+}

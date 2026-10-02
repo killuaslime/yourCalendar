@@ -1,6 +1,6 @@
 @font-face {
     font-family: "Jonova";
-    src: url("fonts/Jonova-Regular.ttf") format("truetype");
+    src: url("../fonts/Jonova-Regular.ttf") format("truetype");
 }
 
 
@@ -30,7 +30,7 @@ body {
 
     color: #222;
 
-    background-image: url("backgrounds/home.png");
+    background-image: url("../backgrounds/home.png");
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -442,6 +442,51 @@ a {
 
 .nav-button:active {
     transform: scale(0.9);
+}
+
+
+/* =========================================
+   ТЁМНАЯ ТЕМА
+   ========================================= */
+
+html[data-theme="dark"] body {
+    color: #f2f2f2;
+
+    background-color: #151515;
+    background-image:
+        linear-gradient(rgba(10, 10, 10, 0.72), rgba(10, 10, 10, 0.72)),
+        url("../backgrounds/home.png");
+}
+
+
+html[data-theme="dark"] .cycle-card,
+html[data-theme="dark"] .today-card {
+    background: rgba(30, 30, 30, 0.68);
+    border-color: rgba(255, 255, 255, 0.16);
+}
+
+
+html[data-theme="dark"] .action-button,
+html[data-theme="dark"] .calendar-button,
+html[data-theme="dark"] .bottom-navigation {
+    background: rgba(30, 30, 30, 0.72);
+    border-color: rgba(255, 255, 255, 0.16);
+}
+
+
+html[data-theme="dark"] .action-button {
+    color: #f2f2f2;
+}
+
+
+html[data-theme="dark"] .bottom-navigation .nav-button.active {
+    background: rgba(255, 255, 255, 0.16);
+}
+
+
+html[data-theme="dark"] .calendar-modal {
+    background: rgba(28, 28, 28, 0.96);
+    color: #f2f2f2;
 }
 
 

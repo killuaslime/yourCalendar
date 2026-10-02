@@ -1,0 +1,19 @@
+{
+  "id": "sunday",
+  "name": "Воскресенье",
+  "universe": "honkai_star_rail",
+  "description": "Таинственный персонаж из Пенаконии.",
+  "access": "premium",
+  "avatar": "01.png",
+  "avatars": [
+    "01.png",
+    "02.png",
+    "03.png"
+  ],
+  "theme": {
+    "color": ""
+  },
+  "ai": {
+    "greeting": ""
+  }
+}

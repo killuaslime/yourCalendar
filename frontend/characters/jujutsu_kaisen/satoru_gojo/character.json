@@ -1,0 +1,19 @@
+{
+  "id": "satoru_gojo",
+  "name": "Сатору Годжо",
+  "universe": "jujutsu_kaisen",
+  "description": "Преподаватель Токийского магического колледжа.",
+  "access": "premium",
+  "avatar": "01.png",
+  "avatars": [
+    "01.png",
+    "02.png",
+    "03.png"
+  ],
+  "theme": {
+    "color": ""
+  },
+  "ai": {
+    "greeting": ""
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "id": "suguru_geto",
+  "name": "Сугуру Гэто",
+  "universe": "jujutsu_kaisen",
+  "description": "Маг с собственной философией и взглядами на мир.",
+  "access": "premium",
+  "avatar": "01.png",
+  "avatars": [
+    "01.png",
+    "02.png",
+    "03.png"
+  ],
+  "theme": {
+    "color": ""
+  },
+  "ai": {
+    "greeting": ""
+  }
+}

@@ -2,10 +2,11 @@ const urlParams = new URLSearchParams(window.location.search);
 
 const profileType = urlParams.get("type");
 
-
 const profileImage = document.getElementById("profileImage");
 const profileName = document.getElementById("profileName");
 const profileUsername = document.getElementById("profileUsername");
+const profileAboutLabel = document.getElementById("profileAboutLabel");
+const profileDescription = document.getElementById("profileDescription");
 const avatarProgress = document.getElementById("avatarProgress");
 
 const backButton = document.getElementById("backButton");
@@ -24,18 +25,7 @@ let currentIndex = 0;
 
 const characterId = urlParams.get("id");
 
-const characterProfile =
-    (typeof getCharacter === "function" && getCharacter(characterId)) || {
-
-        name: "Луна",
-
-        username: "@luna_calendar",
-
-        avatars: [
-            "avatars/luna/avatar1.png"
-        ]
-
-    };
+let characterProfile = null;
 
 
 /* =====================================================
@@ -66,12 +56,15 @@ function loadTelegramProfile() {
     telegram.ready();
 
 
-    const user = telegram.initDataUnsafe?.user;
+    const user =
+        telegram.initDataUnsafe?.user;
 
 
     if (!user) {
 
-        console.log("Данные пользователя Telegram недоступны");
+        console.log(
+            "Данные пользователя Telegram недоступны"
+        );
 
         profileName.textContent = "Пользователь";
         profileUsername.textContent = "@username";
@@ -89,12 +82,14 @@ function loadTelegramProfile() {
        ИМЯ
        ========================= */
 
-    let fullName = user.first_name || "";
+    let fullName =
+        user.first_name || "";
 
 
     if (user.last_name) {
 
-        fullName += " " + user.last_name;
+        fullName +=
+            " " + user.last_name;
 
     }
 
@@ -145,25 +140,83 @@ function loadTelegramProfile() {
    ЗАГРУЗКА ПРОФИЛЯ
    ===================================================== */
 
-function loadProfile() {
+async function loadProfile() {
+
+    /*
+     * Ждём, пока characters.js
+     * загрузит всех персонажей.
+     */
+
+    await charactersReady;
 
 
     if (profileType === "user") {
 
         loadTelegramProfile();
 
+        profileAboutLabel.hidden = true;
+        profileDescription.hidden = true;
+
     }
 
     else {
+
+        characterProfile =
+            await getCharacter(characterId);
+
+
+        /*
+         * Если персонаж не найден,
+         * возвращаем пользователя назад.
+         */
+
+        if (!characterProfile) {
+
+            console.error(
+                "Персонаж не найден:",
+                characterId
+            );
+
+            history.back();
+
+            return;
+
+        }
+
 
         profileName.textContent =
             characterProfile.name;
 
         profileUsername.textContent =
-            characterProfile.username;
+            characterProfile.username || "";
+
+        profileDescription.textContent =
+            characterProfile.description ||
+            "Описание персонажа пока не добавлено.";
+
+        profileAboutLabel.hidden = false;
+        profileDescription.hidden = false;
+
 
         avatars =
             characterProfile.avatars;
+
+
+        /*
+         * Если почему-то нет аватарок,
+         * используем основную.
+         */
+
+        if (
+            !avatars ||
+            avatars.length === 0
+        ) {
+
+            avatars = [
+                characterProfile.avatar
+            ].filter(Boolean);
+
+        }
 
     }
 
@@ -186,25 +239,35 @@ function createProgressBars() {
     avatarProgress.innerHTML = "";
 
 
-    avatars.forEach((avatar, index) => {
+    avatars.forEach(
+        (avatar, index) => {
 
-        const bar =
-            document.createElement("div");
-
-
-        bar.classList.add("progress-bar");
+            const bar =
+                document.createElement("div");
 
 
-        if (index === currentIndex) {
+            bar.classList.add(
+                "progress-bar"
+            );
 
-            bar.classList.add("active");
+
+            if (
+                index === currentIndex
+            ) {
+
+                bar.classList.add(
+                    "active"
+                );
+
+            }
+
+
+            avatarProgress.appendChild(
+                bar
+            );
 
         }
-
-
-        avatarProgress.appendChild(bar);
-
-    });
+    );
 
 }
 
@@ -213,7 +276,16 @@ function createProgressBars() {
    ОБНОВЛЕНИЕ АВАТАРКИ
    ===================================================== */
 
-function updateAvatar(direction = null) {
+function updateAvatar(
+    direction = null
+) {
+
+    if (!avatars.length) {
+
+        return;
+
+    }
+
 
     profileImage.classList.remove(
         "slide-left",
@@ -228,7 +300,9 @@ function updateAvatar(direction = null) {
         avatars[currentIndex];
 
 
-    if (direction === "next") {
+    if (
+        direction === "next"
+    ) {
 
         profileImage.classList.add(
             "slide-left"
@@ -237,7 +311,9 @@ function updateAvatar(direction = null) {
     }
 
 
-    if (direction === "previous") {
+    if (
+        direction === "previous"
+    ) {
 
         profileImage.classList.add(
             "slide-right"
@@ -277,7 +353,9 @@ function nextAvatar() {
 
 function previousAvatar() {
 
-    if (currentIndex > 0) {
+    if (
+        currentIndex > 0
+    ) {
 
         currentIndex--;
 
@@ -353,7 +431,9 @@ document.addEventListener(
             touchEndX - touchStartX;
 
 
-        if (Math.abs(distance) < 50) {
+        if (
+            Math.abs(distance) < 50
+        ) {
 
             return;
 

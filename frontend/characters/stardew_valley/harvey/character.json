@@ -1,0 +1,19 @@
+{
+  "id": "harvey",
+  "name": "Харви",
+  "universe": "stardew_valley",
+  "description": "Врач Пеликан-Тауна.",
+  "access": "premium",
+  "avatar": "01.png",
+  "avatars": [
+    "01.png",
+    "02.png",
+    "03.png"
+  ],
+  "theme": {
+    "color": ""
+  },
+  "ai": {
+    "greeting": ""
+  }
+}

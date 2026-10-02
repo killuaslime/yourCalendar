@@ -1,0 +1,19 @@
+{
+  "id": "diluc",
+  "name": "Дилюк",
+  "universe": "genshin_impact",
+  "description": "Владелец винокурни «Рассвет» и защитник Мондштадта.",
+  "access": "premium",
+  "avatar": "01.png",
+  "avatars": [
+    "01.png",
+    "02.png",
+    "03.png"
+  ],
+  "theme": {
+    "color": ""
+  },
+  "ai": {
+    "greeting": ""
+  }
+}

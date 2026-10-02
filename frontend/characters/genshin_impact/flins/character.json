@@ -1,0 +1,19 @@
+{
+  "id": "flins",
+  "name": "Флинс",
+  "universe": "genshin_impact",
+  "description": "Таинственный персонаж из Нод-Края.",
+  "access": "premium",
+  "avatar": "01.png",
+  "avatars": [
+    "01.png",
+    "02.png",
+    "03.png"
+  ],
+  "theme": {
+    "color": ""
+  },
+  "ai": {
+    "greeting": ""
+  }
+}

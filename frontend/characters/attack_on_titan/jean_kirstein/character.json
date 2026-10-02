@@ -1,0 +1,19 @@
+{
+  "id": "jean_kirstein",
+  "name": "Жан Кирштайн",
+  "universe": "attack_on_titan",
+  "description": "Солдат Разведкорпуса с прямолинейным характером.",
+  "access": "premium",
+  "avatar": "01.png",
+  "avatars": [
+    "01.png",
+    "02.png",
+    "03.png"
+  ],
+  "theme": {
+    "color": ""
+  },
+  "ai": {
+    "greeting": ""
+  }
+}

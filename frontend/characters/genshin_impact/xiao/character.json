@@ -1,0 +1,19 @@
+{
+  "id": "xiao",
+  "name": "Сяо",
+  "universe": "genshin_impact",
+  "description": "Якса, защищающий Ли Юэ от демонов.",
+  "access": "premium",
+  "avatar": "01.png",
+  "avatars": [
+    "01.png",
+    "02.png",
+    "03.png"
+  ],
+  "theme": {
+    "color": ""
+  },
+  "ai": {
+    "greeting": ""
+  }
+}

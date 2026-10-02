@@ -1,3 +1,26 @@
+const themeToggle = document.getElementById("btnToggle");
+
+
+if (themeToggle && window.AppTheme) {
+
+    themeToggle.checked =
+        window.AppTheme.get() === "dark";
+
+
+    themeToggle.addEventListener(
+        "change",
+        () => {
+
+            window.AppTheme.set(
+                themeToggle.checked ? "dark" : "light"
+            );
+
+        }
+    );
+
+}
+
+
 const links = document.querySelectorAll("a");
 
 links.forEach(link => {

@@ -1,0 +1,19 @@
+{
+  "id": "dan_heng",
+  "name": "Дань Хэн",
+  "universe": "honkai_star_rail",
+  "description": "Хранитель архивов и член экипажа Звёздного экспресса.",
+  "access": "premium",
+  "avatar": "01.png",
+  "avatars": [
+    "01.png",
+    "02.png",
+    "03.png"
+  ],
+  "theme": {
+    "color": ""
+  },
+  "ai": {
+    "greeting": ""
+  }
+}

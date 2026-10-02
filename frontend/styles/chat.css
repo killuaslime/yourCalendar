@@ -1,6 +1,6 @@
 @font-face {
     font-family: "Jonova";
-    src: url("fonts/Jonova-Regular.ttf") format("truetype");
+    src: url("../fonts/Jonova-Regular.ttf") format("truetype");
 }
 
 
@@ -26,7 +26,7 @@ body {
 body {
     font-family: "Jonova", sans-serif;
 
-    background-image: url("backgrounds/background1.jpg");
+    background-image: url("../backgrounds/background1.jpg");
     background-size: cover;
     background-position: center;
 
@@ -49,6 +49,45 @@ body {
     flex-direction: column;
 
     background: rgba(0, 0, 0, 0.15);
+}
+
+
+/* =========================
+   ТЁМНАЯ ТЕМА
+   ========================= */
+
+html[data-theme="dark"] body {
+    background-color: #151515;
+    background-image:
+        linear-gradient(rgba(10, 10, 10, 0.72), rgba(10, 10, 10, 0.72)),
+        url("../backgrounds/background1.jpg");
+}
+
+
+html[data-theme="dark"] .chat-header,
+html[data-theme="dark"] .message-input {
+    background: rgba(20, 20, 20, 0.62);
+    border-color: rgba(255, 255, 255, 0.14);
+}
+
+
+html[data-theme="dark"] .chat-info,
+html[data-theme="dark"] .logo-button,
+html[data-theme="dark"] .chat-avatar,
+html[data-theme="dark"] .message-input input,
+html[data-theme="dark"] .message-input button {
+    background: rgba(30, 30, 30, 0.68);
+    border-color: rgba(255, 255, 255, 0.16);
+}
+
+
+html[data-theme="dark"] .bot {
+    background: rgba(50, 50, 50, 0.72);
+}
+
+
+html[data-theme="dark"] .user {
+    background: rgba(80, 80, 80, 0.78);
 }
 
 
@@ -229,11 +268,14 @@ body {
 
     line-height: 1.4;
 
+    /* Сохраняем переводы строк в ответах и длинных сообщениях. */
+    white-space: pre-wrap;
     overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 
-.bot-message {
+.bot {
     align-self: flex-start;
 
     background: rgba(255, 255, 255, 0.2);
@@ -245,7 +287,7 @@ body {
 }
 
 
-.user-message {
+.user {
     align-self: flex-end;
 
     background: rgba(255, 255, 255, 0.35);

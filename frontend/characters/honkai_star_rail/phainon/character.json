@@ -1,0 +1,19 @@
+{
+  "id": "phainon",
+  "name": "Фаенон",
+  "universe": "honkai_star_rail",
+  "description": "Герой Амфореуса.",
+  "access": "premium",
+  "avatar": "01.png",
+  "avatars": [
+    "01.png",
+    "02.png",
+    "03.png"
+  ],
+  "theme": {
+    "color": ""
+  },
+  "ai": {
+    "greeting": ""
+  }
+}

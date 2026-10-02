@@ -11,6 +11,8 @@
     gap: 10px;
 
     margin-top: 20px;
+
+    /* В списке остаётся по одному представителю каждой вселенной. */
 }
 
 
@@ -166,6 +168,22 @@
     color: white;
 
     font-size: 12px;
+}
+
+
+/* =========================================
+   ТЁМНАЯ ТЕМА
+   ========================================= */
+
+html[data-theme="dark"] .contact-row {
+    background: rgba(30, 30, 30, 0.68);
+    border-color: rgba(255, 255, 255, 0.16);
+}
+
+
+html[data-theme="dark"] .calendar-modal {
+    background: rgba(28, 28, 28, 0.96);
+    color: #f2f2f2;
 }
 
 

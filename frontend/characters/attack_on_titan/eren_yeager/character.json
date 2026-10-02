@@ -1,0 +1,19 @@
+{
+  "id": "eren_yeager",
+  "name": "Эрен Йегер",
+  "universe": "attack_on_titan",
+  "description": "Боец Разведкорпуса, стремящийся к свободе.",
+  "access": "premium",
+  "avatar": "01.png",
+  "avatars": [
+    "01.png",
+    "02.png",
+    "03.png"
+  ],
+  "theme": {
+    "color": ""
+  },
+  "ai": {
+    "greeting": ""
+  }
+}

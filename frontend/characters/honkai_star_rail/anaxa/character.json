@@ -1,0 +1,19 @@
+{
+  "id": "anaxa",
+  "name": "Анакса",
+  "universe": "honkai_star_rail",
+  "description": "Учёный и исследователь из Амфореуса.",
+  "access": "premium",
+  "avatar": "01.png",
+  "avatars": [
+    "01.png",
+    "02.png",
+    "03.png"
+  ],
+  "theme": {
+    "color": ""
+  },
+  "ai": {
+    "greeting": ""
+  }
+}

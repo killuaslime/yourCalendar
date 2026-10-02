@@ -1,6 +1,6 @@
 @font-face {
     font-family: "Jonova";
-    src: url("fonts/Jonova-Regular.ttf") format("truetype");
+    src: url("../fonts/Jonova-Regular.ttf") format("truetype");
 }
 
 
@@ -28,7 +28,7 @@ body {
 
 
 body {
-    background-image: url("backgrounds/home.png");
+    background-image: url("../backgrounds/home.png");
 
     background-size: cover;
     background-position: center;
@@ -44,9 +44,36 @@ body {
     position: relative;
 
     width: 100%;
+    min-height: 100dvh;
     height: 100dvh;
 
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+
+/* =========================
+   ТЁМНАЯ ТЕМА
+   ========================= */
+
+html[data-theme="dark"] body {
+    color: #f2f2f2;
+
+    background-color: #151515;
+    background-image:
+        linear-gradient(rgba(10, 10, 10, 0.72), rgba(10, 10, 10, 0.72)),
+        url("../backgrounds/home.png");
+}
+
+
+html[data-theme="dark"] .profile-info {
+    color: #f2f2f2;
+}
+
+
+html[data-theme="dark"] .profile-description {
+    background: rgba(30, 30, 30, 0.68);
+    border-color: rgba(255, 255, 255, 0.16);
 }
 
 
@@ -231,6 +258,40 @@ body {
     font-size: 15px;
 
     opacity: 0.65;
+}
+
+
+.profile-about-label {
+    max-width: 520px;
+
+    margin: 18px auto 0;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    text-align: left;
+}
+
+
+.profile-description {
+    max-width: 520px;
+
+    margin: 6px auto 0;
+    padding: 14px 16px;
+
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 18px;
+
+    background: rgba(255, 255, 255, 0.35);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    font-size: 16px;
+    line-height: 1.45;
+
+    text-align: left;
+    white-space: pre-wrap;
 }
 
 

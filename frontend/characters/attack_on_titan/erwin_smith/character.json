@@ -1,0 +1,19 @@
+{
+  "id": "erwin_smith",
+  "name": "Эрвин Смит",
+  "universe": "attack_on_titan",
+  "description": "Командующий Разведкорпусом.",
+  "access": "premium",
+  "avatar": "01.png",
+  "avatars": [
+    "01.png",
+    "02.png",
+    "03.png"
+  ],
+  "theme": {
+    "color": ""
+  },
+  "ai": {
+    "greeting": ""
+  }
+}

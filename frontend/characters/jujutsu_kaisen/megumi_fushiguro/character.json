@@ -1,0 +1,19 @@
+{
+  "id": "megumi_fushiguro",
+  "name": "Мэгуми Фушигуро",
+  "universe": "jujutsu_kaisen",
+  "description": "Ученик Токийского магического колледжа.",
+  "access": "premium",
+  "avatar": "01.png",
+  "avatars": [
+    "01.png",
+    "02.png",
+    "03.png"
+  ],
+  "theme": {
+    "color": ""
+  },
+  "ai": {
+    "greeting": ""
+  }
+}

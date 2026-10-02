@@ -1,0 +1,19 @@
+{
+  "id": "kazuha",
+  "name": "Кадзуха",
+  "universe": "genshin_impact",
+  "description": "Странствующий самурай из Инадзумы.",
+  "access": "premium",
+  "avatar": "01.png",
+  "avatars": [
+    "01.png",
+    "02.png",
+    "03.png"
+  ],
+  "theme": {
+    "color": ""
+  },
+  "ai": {
+    "greeting": ""
+  }
+}

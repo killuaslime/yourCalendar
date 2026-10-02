@@ -1,0 +1,19 @@
+{
+  "id": "shane",
+  "name": "Шейн",
+  "universe": "stardew_valley",
+  "description": "Работник JojaMart, живущий в Пеликан-Тауне.",
+  "access": "premium",
+  "avatar": "01.png",
+  "avatars": [
+    "01.png",
+    "02.png",
+    "03.png"
+  ],
+  "theme": {
+    "color": ""
+  },
+  "ai": {
+    "greeting": ""
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "id": "varka",
+  "name": "Варка",
+  "universe": "genshin_impact",
+  "description": "Великий магистр Ордо Фавониус.",
+  "access": "premium",
+  "avatar": "01.png",
+  "avatars": [
+    "01.png",
+    "02.png",
+    "03.png"
+  ],
+  "theme": {
+    "color": ""
+  },
+  "ai": {
+    "greeting": ""
+  }
+}

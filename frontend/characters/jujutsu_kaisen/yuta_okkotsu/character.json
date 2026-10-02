@@ -1,0 +1,19 @@
+{
+  "id": "yuta_okkotsu",
+  "name": "Юта Оккоцу",
+  "universe": "jujutsu_kaisen",
+  "description": "Маг особого уровня Токийского колледжа.",
+  "access": "premium",
+  "avatar": "01.png",
+  "avatars": [
+    "01.png",
+    "02.png",
+    "03.png"
+  ],
+  "theme": {
+    "color": ""
+  },
+  "ai": {
+    "greeting": ""
+  }
+}

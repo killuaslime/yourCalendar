@@ -1,0 +1,19 @@
+{
+  "id": "elliott",
+  "name": "Эллиотт",
+  "universe": "stardew_valley",
+  "description": "Писатель, живущий в небольшой хижине на берегу моря.",
+  "access": "premium",
+  "avatar": "01.png",
+  "avatars": [
+    "01.png",
+    "02.png",
+    "03.png"
+  ],
+  "theme": {
+    "color": ""
+  },
+  "ai": {
+    "greeting": ""
+  }
+}

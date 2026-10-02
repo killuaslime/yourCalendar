@@ -151,7 +151,11 @@ function loadPeriods() {
 
         return data
             .filter(p => p && typeof p.start === "string")
-            .map(p => ({ start: p.start, end: p.end || null }))
+            .map(p => ({
+                id: Number.isInteger(p.id) ? p.id : undefined,
+                start: p.start,
+                end: p.end || null
+            }))
             .sort(byStart);
     } catch (error) {
         console.error("Ошибка чтения данных месячных:", error);

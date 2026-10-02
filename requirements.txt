@@ -1,0 +1,8 @@
+aiogram==3.31.0
+alembic==1.20.0
+asyncpg
+fastapi==0.141.1
+PyJWT==2.15.1
+python-dotenv
+SQLAlchemy==2.1.1
+uvicorn[standard]

@@ -9,26 +9,38 @@ if (tg) {
     tg.ready();
     tg.expand();
 }
-const initData = window.Telegram.WebApp.initData;
+const initData = tg?.initData || "";
 
 // Пример отправки POST запроса:
-async function postMe(url = "https://functionality-lifetime-possibly-inexpensive.trycloudflare.com/api/auth/telegram") {
-    const response = await fetch(url, {
+async function postMe() {
+    if (!initData) return null;
+
+    const response = await fetch(`${API_URL}/api/auth/telegram`, {
         method: "POST",
         mode: "cors",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            initData: initData
+            init_data: initData
         })
     });
 
-    const result = await response.json();
-    console.log(result);
+    if (!response.ok) {
+        throw new Error(`Telegram authorization failed: ${response.status}`);
+    }
+
+    return response.json();
 }
 
-postMe();
+postMe()
+    .then(async result => {
+        if (result?.access_token) {
+            sessionStorage.setItem("yourCalendarAccessToken", result.access_token);
+            await loadPeriodsFromApi();
+        }
+    })
+    .catch(error => console.error("Ошибка авторизации Telegram:", error));
 
 /* =========================================================
    ЭЛЕМЕНТЫ
@@ -203,7 +215,7 @@ function setModeText(text) {
    3. иначе → начало новых месячных
    ========================================================= */
 
-function onDayTap(key) {
+async function onDayTap(key) {
     if (key > todayKey()) {
         setModeText("Будущие дни отметить нельзя — я сама покажу прогноз");
         return;
@@ -211,33 +223,70 @@ function onDayTap(key) {
 
     const existingIndex = periods.findIndex(p => p.start === key);
 
-    if (existingIndex !== -1) {
+    try {
+        if (existingIndex !== -1) {
+            const period = periods[existingIndex];
 
-        periods.splice(existingIndex, 1);
-        setModeText("Отметка удалена");
+            if (getAccessToken() && period.id) {
+                await apiFetch(`/api/cycle/periods/${period.id}`, {
+                    method: "DELETE"
+                });
+            }
 
-    } else {
-
-        const owner = [...periods]
-            .reverse()
-            .find(p => p.start < key && diffDays(key, p.start) < MAX_PERIOD);
-
-        if (owner) {
-
-            owner.end = key;
-
-            setModeText(
-                `Месячные: ${formatDay(owner.start)} — ${formatDay(key)}`
-            );
+            periods.splice(existingIndex, 1);
+            setModeText("Отметка удалена");
 
         } else {
 
-            periods.push({ start: key, end: null });
+            const owner = [...periods]
+                .reverse()
+                .find(p => p.start < key && diffDays(key, p.start) < MAX_PERIOD);
 
-            setModeText(
-                `Начало: ${formatDay(key)}. Если они уже закончились, нажми на последний день`
-            );
+            if (owner) {
+                let savedPeriod = null;
+
+                if (getAccessToken() && owner.id) {
+                    savedPeriod = await apiFetch(
+                        `/api/cycle/periods/${owner.id}`,
+                        {
+                            method: "PATCH",
+                            body: JSON.stringify({ end_date: key })
+                        }
+                    );
+                }
+
+                owner.end = savedPeriod ? savedPeriod.end_date : key;
+
+                setModeText(
+                    `Месячные: ${formatDay(owner.start)} — ${formatDay(key)}`
+                );
+
+            } else {
+                let savedPeriod = null;
+
+                if (getAccessToken()) {
+                    savedPeriod = await apiFetch("/api/cycle/periods", {
+                        method: "POST",
+                        body: JSON.stringify({ start_date: key })
+                    });
+                }
+
+                periods.push({
+                    id: savedPeriod?.id,
+                    start: savedPeriod?.start_date || key,
+                    end: savedPeriod?.end_date || null
+                });
+
+                setModeText(
+                    `Начало: ${formatDay(key)}. Если они уже закончились, нажми на последний день`
+                );
+            }
         }
+
+    } catch (error) {
+        console.error("Не удалось сохранить период:", error);
+        setModeText("Не удалось сохранить. Попробуй ещё раз.");
+        return;
     }
 
     savePeriods();
@@ -245,6 +294,19 @@ function onDayTap(key) {
 
     refreshCalendar();
     updateCycleOnMain();
+}
+
+async function loadPeriodsFromApi() {
+    const data = await apiFetch("/api/cycle");
+
+    periods = data.periods.map(period => ({
+        id: period.id,
+        start: period.start_date,
+        end: period.end_date
+    }));
+
+    recalculate();
+    refreshToday();
 }
 
 

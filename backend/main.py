@@ -6,7 +6,7 @@ from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, W
 
 from dotenv import load_dotenv
 import os
-from database.database import SessionLocal, engine, Base
+from database.database import SessionLocal
 from database.models import User, Subscription
 from sqlalchemy import select
 
@@ -77,11 +77,6 @@ async def start_handler(message: Message):
             await message.answer("Подписка не активна")
 
 async def main():
-    async with engine.begin() as connection:
-        await connection.run_sync(Base.metadata.create_all)
-
-    print("Таблицы успешно созданы!")
-
     bot = Bot(TOKEN)
 
     await dp.start_polling(bot)
